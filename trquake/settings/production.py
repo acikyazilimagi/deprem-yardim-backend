@@ -1,4 +1,7 @@
 from .base import *
+import environ
+
+env = environ.Env()
 
 DEBUG = False
 ALLOWED_HOSTS = []

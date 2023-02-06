@@ -15,6 +15,13 @@ celery = "^5.2.7"
 tweepy = "^4.12.1"
 djangorestframework = "^3.14.0"
 django-environ = "^0.9.0"
+redis = "^4.4.2"
+django-cors-headers = "^3.13.0"
+gunicorn = "^20.1.0"
+
+
+[tool.poetry.dev-dependencies]
+watchdog = {version = "^2.2.1", extras = ["watchmedo"]}
 
 [build-system]
 requires = ["poetry-core"]
