@@ -1,0 +1,39 @@
+repos:
+- repo: https://github.com/psf/black
+  rev: 22.8.0
+  hooks:
+    - id: black
+      language_version: python3
+      additional_dependencies: [ 'click==8.0.4' ]
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.2.3
+  hooks:
+    - id: trailing-whitespace
+    - id: check-added-large-files
+    - id: check-ast
+    - id: check-json
+    - id: check-merge-conflict
+    - id: check-xml
+    #  - id: check-yaml
+    - id: debug-statements
+    - id: end-of-file-fixer
+      exclude: .ipynb
+    - id: requirements-txt-fixer
+    - id: mixed-line-ending
+      args: [ '--fix=auto' ]
+    - id: flake8
+      args: [
+        '--max-line-length=88',
+        '--ignore=W605,W503,E203',
+      ]
+
+- repo: https://github.com/pre-commit/mirrors-isort
+  rev: v5.10.1
+  hooks:
+  - id: isort
+    args: ['--trailing-comma','-tc', '-l 88']
+
+-   repo: https://github.com/kynan/nbstripout
+    rev: 93d7aae
+    hooks:
+    -   id: nbstripout
