@@ -10,8 +10,20 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet):
     data = {
         "segment": "author-complete",
         "model": "text-davinci-003",
-        "sentence": f"Extract the address for Google Maps APi using this tweet, the address will be from Turkey: "
-                    f"{tweet.full_text}",
+        "sentence": """Tabular Data Extraction
+                    You are a highly intelligent and accurate tabular data extractor from plain text input and especially from emergency text that carries address information, your inputs can be text of arbitrary size, but the output should be in [{'tabular': {'entity_type': 'entity'} }] JSON format
+
+                    Force it to only extract keys that are shared as an example in the examples section, if a key value is not found in the text input, then it should be ignored and should be returned as an empty string
+
+                    Have only il, ilçe, mahalle, sokak, no, tel, isim_soyisim, adres
+
+                    Examples:
+                    Input: Deprem sırasında evimizde yer alan adresimiz: İstanbul, Beşiktaş, Yıldız Mahallesi, Cumhuriyet Caddesi No: 35, cep telefonu numaram 5551231256, adim Ahmet Yilmaz
+                    Output: [{'Tabular': '{'il': 'İstanbul', 'ilçe': 'Beşiktaş', 'mahalle': 'Yıldız Mahallesi', 'sokak': 'Cumhuriyet Caddesi', 'no': 35, 'tel': 5551231256, 'isim_soyisim': 'Ahmet Yılmaz', 'adres': 'İstanbul, Beşiktaş, Yıldız Mahallesi, Cumhuriyet Caddesi No: 35'}' }]
+
+                    Input: %s
+                    Output:
+                    """ % tweet.full_text,
         "description": "default",
         "filter": "default",
         "suffix": "",
