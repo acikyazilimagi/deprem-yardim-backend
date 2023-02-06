@@ -4,7 +4,7 @@ import pandas as pd
 
 mahalle_list = ["mahallesi", "mh\.", "mh", "mah."]
 sokak_list = ['sokağı', 'sokagi', 'caddesi', 'sokak', 'cadde', "bulvarı", "bulvari", "blv", "yol", "yolu", 'sk', 'cd', "sok", "cad"]
-site_list = ['sitesi', 'apartmanı', 'apartmani', "rezidans", 'evleri', 'bina', 'site', 'evi', 'apt']
+site_list = ['sitesi', 'apartmanı', 'apartmani', "rezidans", 'evleri', 'bina', 'site', 'evi', 'apt', 'aprt']
 blok_list = ['blok', 'etap', 'kisim', 'kısım']
 
 
@@ -100,7 +100,7 @@ class ExtractInfo:
         try:
             extracted_ilçe = ilçe_pattern.findall(unidecoded_text)[0]
             unidecoded_text = unidecoded_text.replace(extracted_ilçe, "")
-            self.result["ilçe"] = ilçe_dict[extracted_ilçe].title() + "Mah"
+            self.result["ilçe"] = ilçe_dict[extracted_ilçe].title()
         except:
             self.result["ilçe"] = ""
 
