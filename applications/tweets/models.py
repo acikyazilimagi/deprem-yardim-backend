@@ -1,3 +1,24 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
-# Create your models here.
+
+class Tweet(models.Model):
+    user_id = models.CharField(max_length=255)
+    screen_name = models.CharField(max_length=512)
+    name = models.CharField(max_length=255)
+    verified = models.BooleanField(default=False)
+    tweet_id = models.CharField(max_length=255)
+    created_at = models.DateTimeField(null=True, blank=True)
+    full_text = models.TextField()
+    hashtags = ArrayField(base_field=models.CharField(max_length=255))
+
+    class Meta:
+        ordering = ["-id"]
+
+
+class Address(models.Model):
+    tweet_id = models.ForeignKey("tweets.Tweet", on_delete=models.CASCADE)
+    address = models.TextField()
+
+    class Meta:
+        ordering = ["-id"]

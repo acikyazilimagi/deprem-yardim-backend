@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # apps
     "tweets",
+    "core",
 ]
 
 MIDDLEWARE = [
@@ -140,3 +141,8 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
+
+TWITTER_BEARER_TOKEN = env("TWITTER_BEARER_TOKEN")
+
+ZEKAI_USERNAME = env("ZEKAI_USERNAME")
+ZEKAI_PASSWORD = env("ZEKAI_PASSWORD")

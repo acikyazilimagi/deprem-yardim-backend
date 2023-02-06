@@ -19,4 +19,4 @@ services:
     container_name: trquake-workers
     image: trquake-worker
     ports: []
-    command: watchmedo auto-restart --directory=/app --pattern=*.py --recursive -- celery -A trquake.celery.app worker -B --concurrency=5 -l DEBUG
+    command: celery -A trquake.celery.app worker -B --concurrency=5 -l DEBUG
