@@ -18,6 +18,6 @@ app.conf.beat_schedule = {
     # Executes every Monday morning at 7:30 a.m.
     'collect_tweets': {
         'task': 'tweets.tasks.collect_tweets',
-        'schedule': 180.0,
+        'schedule': 300.0,
     },
 }

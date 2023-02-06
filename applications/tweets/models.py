@@ -10,7 +10,7 @@ class Tweet(models.Model):
     tweet_id = models.CharField(max_length=255)
     created_at = models.DateTimeField(null=True, blank=True)
     full_text = models.TextField()
-    hashtags = ArrayField(base_field=models.CharField(max_length=255))
+    hashtags = ArrayField(base_field=models.CharField(max_length=255), null=True)
 
     class Meta:
         ordering = ["-id"]
