@@ -5,7 +5,7 @@ env = environ.Env()
 
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
-CORS_ALLOWED_ORIGINS = ["https://afetharita.com"]
+CORS_ALLOWED_ORIGINS = ["https://afetharita.com", "https://api.afetharita.com"]
 
 
 DATABASES = {
