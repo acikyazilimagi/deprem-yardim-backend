@@ -9,6 +9,8 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 WORKDIR /app
 
 RUN apt-get update && apt-get upgrade -y
+RUN apt-get install git -y
+
 RUN pip install --upgrade pip
 RUN pip install poetry
 

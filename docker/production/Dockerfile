@@ -10,6 +10,8 @@ ENV DJANGO_SETTINGS_MODULE=trquake.settings.production
 WORKDIR /app
 
 RUN apt-get update && apt-get upgrade -y
+RUN apt-get install git -y
+
 RUN pip install --upgrade pip
 RUN pip install poetry
 
