@@ -45,5 +45,16 @@ class Location(models.Model):
     southwest_lng = models.FloatField(default=0.0)
     is_approved = models.BooleanField(default=False)
 
+    @property
+    def loc(self):
+        return [self.latitude, self.longitude]
+
+    @property
+    def viewport(self):
+        return {
+            "northeast": {"lat": self.northeast_lat, "lng": self.northeast_lng},
+            "southwest": {"lat": self.southwest_lat, "lng": self.southwest_lng},
+        }
+
     class Meta:
         ordering = ["-id"]
