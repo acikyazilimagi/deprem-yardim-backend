@@ -61,7 +61,7 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet):
             tel=processed_address.get("tel"),
         )
         if not full_address:
-            return 
+            return
         geolocation_response = requests.get(
             url=ty_geolocation_url, params={"address": full_address}
         )
