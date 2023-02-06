@@ -3,8 +3,8 @@ import unidecode
 import pandas as pd
 
 mahalle_list = ["mahallesi", "mh\.", "mh", "mah."]
-sokak_list = ['sokağı', 'sokagi', 'caddesi', 'sokak', 'cadde', "bulvarı", "bulvari", "yol", "yolu", 'sk', 'cd', "sok", "cad"]
-site_list = ['sitesi', 'apartmanı', 'apartmani', "rezidans", 'evleri', 'bina', 'site', 'evi', 'apt', 'aprt']
+sokak_list = ['sokağı', 'sokagi', 'caddesi', 'sokak', 'cadde', "bulvarı", "bulvari", "blv", "yol", "yolu", 'sk', 'cd', "sok", "cad"]
+site_list = ['sitesi', 'apartmanı', 'apartmani', "rezidans", 'evleri', 'bina', 'site', 'evi', 'apt']
 blok_list = ['blok', 'etap', 'kisim', 'kısım']
 
 
@@ -29,15 +29,17 @@ class ExtractInfo:
     def __init__(self, text):
         self.text = ' '.join(text.strip().split())
         self.result = {
-            "il": "",
-            "ilçe": "",
             "mahalle": "",
             "sokak_cadde_bulvar_yol": "",
             "site_apartman_bina": "",
             "blok": "",
             "kat": "",
             "daire_no": "",
-            "telefon": ""
+            "il": "",
+            "ilçe": "",
+            "telefon": "",
+            "fullAddress": "",
+            "text": self.text,
         }
 
     @staticmethod
@@ -98,7 +100,7 @@ class ExtractInfo:
         try:
             extracted_ilçe = ilçe_pattern.findall(unidecoded_text)[0]
             unidecoded_text = unidecoded_text.replace(extracted_ilçe, "")
-            self.result["ilçe"] = ilçe_dict[extracted_ilçe].title()
+            self.result["ilçe"] = ilçe_dict[extracted_ilçe].title() + "Mah"
         except:
             self.result["ilçe"] = ""
 
@@ -164,6 +166,8 @@ class ExtractInfo:
             self.text = self.text.replace(self.result["telefon"], "")
         except:
             self.result["telefon"] = ""
+
+        self.result["full_address"] = f"{self.result['mahalle']} mahallesi, {self.result['sokak_cadde_bulvar_yol']} , {self.result['site_apartman_bina']} Apartmanı, {self.result['blok']}, No: {self.result['daire_no']} {self.result['ilçe']} / {self.result['il']}"
 
         return self.result
 
