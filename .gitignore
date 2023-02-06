@@ -10,3 +10,7 @@ celerybeat-schedule
 # environment
 .env
 
+# statics
+statics/root/*
+!statics/root/.gitkeep
+

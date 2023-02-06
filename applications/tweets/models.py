@@ -11,6 +11,8 @@ class Tweet(models.Model):
     created_at = models.DateTimeField(null=True, blank=True)
     full_text = models.TextField()
     hashtags = ArrayField(base_field=models.CharField(max_length=255), null=True)
+    user_account_created_at = models.DateTimeField(null=True, blank=True)
+    media = models.CharField(max_length=512, null=True)
 
     class Meta:
         ordering = ["-id"]
