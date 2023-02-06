@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tweets.models import Address, Tweet
+from tweets.models import Address, Tweet, Location
 
 
 @admin.register(Tweet)
@@ -30,3 +30,16 @@ class AddressAdmin(admin.ModelAdmin):
     class Meta:
         model = Address
 
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ["latitude", "longitude", "get_full_address", "formatted_address", "is_approved"]
+    list_editable = ["is_approved"]
+    list_filter = ["is_approved"]
+
+    @admin.display(ordering="address__full_text", description="Full Address")
+    def get_full_address(self, obj: Location):
+        return obj.address.address
+
+    class Meta:
+        model = Location
