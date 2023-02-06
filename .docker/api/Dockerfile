@@ -7,13 +7,9 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 
 WORKDIR /app
 
-<<<<<<< HEAD:docker/production/Dockerfile
 RUN apt-get update && apt-get upgrade -y
-RUN apt-get install git -y
+RUN apt-get install git tini -y
 
-=======
-RUN apt-get update && apt-get upgrade -y && apt-get install tini -y
->>>>>>> 35f492edbf9df2524ddbc4bace7cde434a3b4864:.docker/api/Dockerfile
 RUN pip install --upgrade pip
 RUN pip install poetry
 
