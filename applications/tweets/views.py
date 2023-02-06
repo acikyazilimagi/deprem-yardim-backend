@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 
-from tweets.custom_pagination import LocationPagination
+from core.pagination import LocationPagination
 from tweets.models import Location
 from tweets.serializers import LocationSerializer
 
