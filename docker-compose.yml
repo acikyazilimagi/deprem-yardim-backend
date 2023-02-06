@@ -7,7 +7,7 @@ services:
       dockerfile: .docker/api/Dockerfile
       context: .
     ports:
-      - "8000:8000"
+      - "8000:80"
     environment:
       - DJANGO_SETTINGS_MODULE=trquake.settings.development
       - POSTGRES_PASSWORD=debug
