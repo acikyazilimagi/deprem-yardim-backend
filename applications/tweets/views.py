@@ -4,6 +4,6 @@ from tweets.serializers import LocationSerializer
 
 
 class LocationViewSet(ModelViewSet):
-    queryset = Location.objects.select_related("address", "address__tweet").filter(is_approved=True)
+    queryset = Location.objects.select_related("address", "address__tweet").all()
     serializer_class = LocationSerializer
     http_method_names = ["options", "head", "get"]

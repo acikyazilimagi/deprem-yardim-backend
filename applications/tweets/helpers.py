@@ -67,6 +67,7 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet) -> None:
         # do we want to save this address when it doesn't even have address?
         if not full_address:
             return
+        
         address = Address.objects.create(
             tweet_id=tweet.id,
             address=full_address,
