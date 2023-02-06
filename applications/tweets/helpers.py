@@ -1,12 +1,17 @@
+import logging
+
 import requests
 from django.conf import settings
+from rest_framework import status
+
 from tweets.models import Tweet, Address, Location
 from typing import List, Dict
 from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 import json
 
+logger = logging.getLogger(__name__)
 
-def ask_to_zekai(headers: Dict[str, str], tweet: Tweet):
+def ask_to_zekai(headers: Dict[str, str], tweet: Tweet) -> None:
     submit_url = "https://zekai.co/author-api/v1/submit-text"
     ty_geolocation_url = "https://public-sdc.trendyol.com/discovery-web-websfxgeolocation-santral/geocode"
     data = {
@@ -42,13 +47,27 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet):
     submit_response = requests.post(
         url=submit_url, json=data, headers=headers, verify=False
     )
+    if submit_response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR:
+        logger.debug(f"Status code: {submit_response.status_code}")
+        return
+
+    if submit_response.status_code == status.HTTP_400_BAD_REQUEST:
+        logger.debug(f"Status code: {submit_response.status_code}, payload: {data}, reason: ")
+        # we should have another state in model for the failed request so that we run a task for them too.
+        return
+
+    # TODO: can this be transaction atomic?
     try:
         submit_data = submit_response.json()
     except requests.exceptions.InvalidJSONError:
         return
     if choices := submit_data.get("choices"):
         processed_address = json.loads(choices[0]["text"].strip())
-        full_address = processed_address["address"]
+        full_address = processed_address.get("address")
+        # do we want to save this address when it doesn't even have address?
+        if not full_address:
+            return
+        
         address = Address.objects.create(
             tweet_id=tweet.id,
             address=full_address,
@@ -60,8 +79,7 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet):
             name_surname=processed_address.get("name_surname"),
             tel=processed_address.get("tel"),
         )
-        if not full_address:
-            return
+
         geolocation_response = requests.get(
             url=ty_geolocation_url, params={"address": full_address}
         )
