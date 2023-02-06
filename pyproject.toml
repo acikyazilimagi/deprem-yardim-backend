@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "trquake"
+version = "0.1.0"
+description = ""
+authors = ["ahmetkotan <ahmet.kotan@octoxlabs.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+Django = {version = "^4.1.6"}
+psycopg2-binary = "^2.9.5"
+celery = "^5.2.7"
+tweepy = "^4.12.1"
+djangorestframework = "^3.14.0"
+django-environ = "^0.9.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

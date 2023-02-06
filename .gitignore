@@ -1,0 +1,10 @@
+# jetbrains
+.idea/
+
+
+# databases
+*.db
+*.sqlite3
+
+# environment
+.env
