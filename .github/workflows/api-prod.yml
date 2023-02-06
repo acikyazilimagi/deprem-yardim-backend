@@ -1,9 +1,9 @@
+name: Deploy API Prod
+
 on:
  push:
     branches:
       - prod
-
-name: Deploy to Amazon ECS DEV
 
 jobs:
   deploy:
@@ -30,7 +30,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: d-ecr
+        ECR_REPOSITORY: api-ecr
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and
@@ -39,6 +39,7 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: container-name
       uses: aws-actions/amazon-ecs-render-task-definition@v1
