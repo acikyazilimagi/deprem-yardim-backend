@@ -5,6 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV POETRY_VIRTUALENVS_CREATE=false
+ENV DJANGO_SETTINGS_MODULE=trquake.settings.production
 
 WORKDIR /app
 
@@ -15,12 +16,9 @@ RUN pip install poetry
 COPY pyproject.toml poetry.lock ./
 RUN poetry install
 
-COPY docker/development/entrypoint.sh /entrypoint
-RUN chmod +x /entrypoint
-
 COPY docker/development/start-django.sh /start-django
 RUN chmod +x /start-django
 
 COPY ./ ./
 
-ENTRYPOINT ["/entrypoint"]
+CMD ["/start-django"]

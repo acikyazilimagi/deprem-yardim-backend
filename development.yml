@@ -5,7 +5,7 @@ volumes:
 
 
 services:
-  django:
+  django: &django
     container_name: trquake-app
     build:
       dockerfile: docker/development/Dockerfile
@@ -27,9 +27,31 @@ services:
   database:
     image: postgres:15.1
     container_name: trquake-database
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=debug
       - POSTGRES_USER=debug
       - POSTGRES_DB=debug
     volumes:
       - trquake_postgres:/var/lib/postgresql/data
+
+  workers:
+    <<: *django
+    container_name: trquake-workers
+    ports: []
+    command: watchmedo auto-restart --directory=/app --pattern=*.py --recursive -- celery -A trquake.celery.app worker -B --concurrency=5 -l DEBUG
+    environment:
+      - DJANGO_SETTINGS_MODULE=trquake.settings.development
+      - POSTGRES_PASSWORD=debug
+      - POSTGRES_USER=debug
+      - POSTGRES_DB=debug
+      - POSTGRES_HOST=trquake-database
+      - POSTGRES_PORT=5432
+
+  queue:
+    container_name: trquake-queue
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
