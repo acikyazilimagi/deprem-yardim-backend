@@ -4,7 +4,7 @@ import environ
 env = environ.Env()
 
 DEBUG = False
-ALLOWED_HOSTS = ["afetharita.com"]
+ALLOWED_HOSTS = ["afetharita.com", "api.afetharita.com"]
 CORS_ALLOWED_ORIGINS = ["https://afetharita.com"]
 
 
