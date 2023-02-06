@@ -36,6 +36,12 @@ def collect_tweets():
         created_at = df["date"][ind]
         full_text = df["rawContent"][ind]
         hashtags = [i for i in df["hashtags"]][ind]
+        user_account_created_at = df['user'][ind]['created']
+        try:
+            media = df['media'][ind][0]['previewUrl']
+        except KeyError:
+            media = None
+        
         data.append(
             Tweet(
                 user_id=user_id,
@@ -44,7 +50,9 @@ def collect_tweets():
                 tweet_id=tweet_id,
                 created_at=created_at,
                 full_text=full_text,
-                hashtags=hashtags
+                hashtags=hashtags,
+                user_account_created_at=user_account_created_at,
+                media=media
             )
         )
     created_tweets = Tweet.objects.bulk_create(data)
