@@ -1,7 +1,7 @@
 on:
  push:
     branches:
-      - lab
+      - prod
 
 name: Deploy to Amazon ECS DEV
 
