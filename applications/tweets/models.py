@@ -17,7 +17,7 @@ class Tweet(models.Model):
 
 
 class Address(models.Model):
-    tweet_id = models.ForeignKey("tweets.Tweet", on_delete=models.CASCADE)
+    tweet = models.ForeignKey("tweets.Tweet", on_delete=models.CASCADE)
     address = models.TextField()
 
     class Meta:

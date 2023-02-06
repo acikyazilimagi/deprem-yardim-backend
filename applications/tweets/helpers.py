@@ -33,7 +33,7 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet):
     except requests.exceptions.InvalidJSONError:
         return
     if choices := submit_data.get("choices"):
-        Address.objects.create(tweet_id=tweet.id, address=choices[0]["text"])
+        Address.objects.create(tweet_id=tweet.id, address=choices[0]["text"].strip())
 
 
 def bulk_ask_to_zekai(tweet_data: List[Tweet]):
