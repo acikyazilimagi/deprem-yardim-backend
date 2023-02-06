@@ -39,7 +39,7 @@ def collect_tweets():
         user_account_created_at = df['user'][ind]['created']
         try:
             media = df['media'][ind][0]['previewUrl']
-        except KeyError:
+        except (KeyError, TypeError):
             media = None
         
         data.append(
