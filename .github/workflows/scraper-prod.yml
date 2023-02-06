@@ -54,4 +54,4 @@ jobs:
         task-definition: ${{ steps.container-name.outputs.task-definition }}
         service: d-src
         cluster: base-cluster
-        wait-for-service-stability: true
+        wait-for-service-stability: false
