@@ -15,7 +15,7 @@ def collect_tweets():
     since_time = int(
         (
             datetime.datetime.now().replace(second=0, microsecond=0)
-            - datetime.timedelta(minutes=2)
+            - datetime.timedelta(minutes=7)
         ).timestamp()
     )
 
@@ -55,5 +55,5 @@ def collect_tweets():
                 media=media
             )
         )
-    created_tweets = Tweet.objects.bulk_create(data)
+    created_tweets = Tweet.objects.bulk_create(data, ignore_conflicts=True)
     bulk_ask_to_zekai(tweet_data=created_tweets)

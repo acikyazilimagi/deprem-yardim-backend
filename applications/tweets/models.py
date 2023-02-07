@@ -7,7 +7,7 @@ class Tweet(models.Model):
     screen_name = models.CharField(max_length=512)
     name = models.CharField(max_length=255)
     verified = models.BooleanField(default=False)
-    tweet_id = models.CharField(max_length=255)
+    tweet_id = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(null=True, blank=True)
     full_text = models.TextField()
     hashtags = ArrayField(base_field=models.CharField(max_length=255), null=True)
