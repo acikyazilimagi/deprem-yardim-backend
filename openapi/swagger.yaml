@@ -138,6 +138,19 @@ components:
               type: string
             screen_name:
               type: string
+        instagram_raw:
+          type: object
+          properties:
+            full_text:
+              type: string
+            post_id:
+              type: string
+            user_id:
+              type: string
+            name:
+              type: string
+            screen_name:
+              type: string
         resolution:
           type: object
           properties:

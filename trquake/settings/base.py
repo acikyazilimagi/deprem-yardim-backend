@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # apps
     "tweets",
     "core",
+    "instagram"
 ]
 
 MIDDLEWARE = [
@@ -139,7 +140,7 @@ STATIC_ROOT = BASE_DIR / "statics" / "root"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://trquake-queue:6379")
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://trquake-redis:6379")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
@@ -148,6 +149,9 @@ CELERY_RESULT_SERIALIZER = "json"
 ZEKAI_USERNAME = env("ZEKAI_USERNAME")
 ZEKAI_PASSWORD = env("ZEKAI_PASSWORD")
 
+INSTAGRAM_USERNAME = env("INSTAGRAM_USERNAME", default=None)
+INSTAGRAM_PASSWORD = env("INSTAGRAM_PASSWORD", default=None)
+INSTAGRAM_RECENT_POSTS_PER_HASHTAG = env.int("INSTAGRAM_RECENT_POSTS_PER_HASHTAG", default=5)
 
 LOGGING = {
     "version": 1,

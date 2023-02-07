@@ -20,4 +20,8 @@ app.conf.beat_schedule = {
         'task': 'tweets.tasks.collect_tweets',
         'schedule': 300.0,
     },
+    'collect_tweets': {
+        'task': 'instagram.tasks.collect_instagram_posts',
+        'schedule': 500.0,
+    },
 }
