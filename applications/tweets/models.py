@@ -19,7 +19,8 @@ class Tweet(models.Model):
 
 
 class Address(models.Model):
-    tweet = models.ForeignKey("tweets.Tweet", on_delete=models.CASCADE)
+    tweet = models.ForeignKey("tweets.Tweet", on_delete=models.CASCADE, null=True)
+    instagram_post = models.ForeignKey("instagram.InstagramPost", on_delete=models.CASCADE, null=True)
     address = models.TextField()
     city = models.CharField(max_length=255, null=True, blank=True)
     distinct = models.CharField(max_length=255, null=True, blank=True)

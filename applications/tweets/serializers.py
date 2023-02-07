@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from tweets.models import Location, Tweet, Address
-
+from instagram.serializers import InstagramPostSerializer
 
 class TweetSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,9 +16,10 @@ class AddressSerializer(serializers.ModelSerializer):
 
 class LocationSerializer(serializers.ModelSerializer):
     raw = TweetSerializer(source="address.tweet")
+    instagram_raw = TweetSerializer(source="address.instagram_post")
+
     resolution = AddressSerializer(source="address")
 
     class Meta:
         model = Location
-        fields = ["id", "formatted_address", "loc", "viewport", "raw", "resolution"]
-
+        fields = ["id", "formatted_address", "loc", "viewport", "raw", "instagram_raw", "resolution"]
