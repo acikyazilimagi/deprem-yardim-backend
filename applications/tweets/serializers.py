@@ -5,7 +5,7 @@ from tweets.models import Location, Tweet, Address
 class TweetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tweet
-        fields = ["full_text", "tweet_id", "user_id", "name", "screen_name"]
+        fields = ["full_text", "tweet_id","created_at", "user_id", "name", "screen_name"]
 
 
 class AddressSerializer(serializers.ModelSerializer):

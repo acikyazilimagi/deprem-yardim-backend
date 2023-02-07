@@ -8,6 +8,7 @@ from django.db.models import Q, Count
 
 from core.pagination import LocationPagination
 from tweets.models import Location
+from tweets.filters import LocationFilterBackend
 from tweets.serializers import LocationSerializer
 import operator
 from functools import reduce
@@ -18,6 +19,8 @@ class LocationViewSet(ModelViewSet):
     serializer_class = LocationSerializer
     http_method_names = ["options", "head", "get"]
     pagination_class = LocationPagination
+    filter_backends = [LocationFilterBackend]
+                     
 
 
 class AreaViewSet(GenericViewSet):
