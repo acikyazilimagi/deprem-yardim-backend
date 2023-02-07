@@ -130,7 +130,7 @@
     "operatingSystemFamily": "LINUX",
     "cpuArchitecture": null
   },
-  "cpu": "256",
+  "cpu": "1024",
   "revision": 3,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
