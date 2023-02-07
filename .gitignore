@@ -1,5 +1,6 @@
 # jetbrains
 .idea/
+.vscode
 
 
 # databases
@@ -9,6 +10,7 @@ celerybeat-schedule
 
 # environment
 .env
+.venv
 
 # statics
 statics/root/*

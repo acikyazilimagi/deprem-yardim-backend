@@ -34,13 +34,13 @@ def fetch_tweets(query: str):
             media = None
 
         yield {
-            "full_text": full_text,
-            "user_id": user_id,
-            "screen_name": screen_name,
-            "name": name,
-            "tweet_id": tweet_id,
-            "created_at": created_at,
-            "hashtags": hashtags,
-            "user_account_created_at": user_account_created_at,
-            "media": media,
+            "full_text": str(full_text),
+            "user_id": str(user_id),
+            "screen_name": str(screen_name),
+            "name": str(name),
+            "tweet_id": str(tweet_id),
+            "created_at": str(created_at),
+            "hashtags": str(hashtags),
+            "user_account_created_at": str(user_account_created_at),
+            "media": str(media),
         }
