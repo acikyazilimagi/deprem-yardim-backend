@@ -69,8 +69,8 @@ python
 Projeyi development modunda açmak için:
 
 ```sh
-django-admin createsuperuser
 django-admin migrate
+django-admin createsuperuser
 django-admin runserver
 ```
 
