@@ -53,8 +53,8 @@ POSTGRES_DB=debug
 POSTGRES_HOST=trquake-database
 POSTGRES_PORT=5432
 CELERY_BROKER_URL=trquake-redis
-ZEKAI_USERNAME= # zekai.io kullanıcı adı
-ZEKAI_PASSWORD= # zekai.io şifre
+ZEKAI_USERNAME= # zekai.co kullanıcı adı
+ZEKAI_PASSWORD= # zekai.co şifre
 DEFAULT_ADMIN_PASSWORD= # ilk oluşturulan admin kullanıcısı için şifre
 ```
 
