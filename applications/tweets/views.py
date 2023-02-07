@@ -16,12 +16,29 @@ class LocationViewSet(ModelViewSet):
 
 class AreaViewSet(GenericViewSet):
     serializer_class = LocationSerializer
-    pagination_class = AreaPagination
 
     def get_queryset(self):
         return Location.objects.select_related("address", "address__tweet").all()
 
     def list(self, request: Request, *args, **kwargs) -> Response:
+        """
+        list method retrieves a list of objects in the queryset based on the bounds defined by the
+         ne_lat, ne_lng, sw_lat, sw_lng parameters provided in the request query_params.
+
+        The method returns an HTTP 400 BAD REQUEST error if any of the four parameters are not provided in the query.
+        If the parameters are not float values, an HTTP error is returned.
+
+        If the input is valid, the method filters the queryset based on the bounds and returns a serialized list of
+        objects in the queryset in an HTTP 200 OK response.
+
+        Parameters:
+        request (Request): The incoming request object.
+        *args: Additional arguments passed to the method.
+        **kwargs: Additional keyword arguments passed to the method.
+
+        Returns:
+        Response: A serialized list of objects in the queryset within the defined bounds.
+        """
         ne_lat = self.request.query_params.get("ne_lat")
         ne_lng = self.request.query_params.get("ne_lng")
         sw_lat = self.request.query_params.get("sw_lat")
@@ -52,9 +69,5 @@ class AreaViewSet(GenericViewSet):
             southwest_lng__gte=sw_lng
         )
 
-        page = self.paginate_queryset(self.queryset)
-        if page is not None:
-            serializer = self.serializer_class(page, many=True)
-            return self.get_paginated_response(serializer.data)
         serializer = self.serializer_class(self.queryset, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
