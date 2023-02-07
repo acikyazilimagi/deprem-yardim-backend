@@ -1,23 +1,11 @@
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from core.pagination import LocationPagination
+from taleps.models import TalepLocation
+from taleps.serializers import LocationSerializer
 
-from rest_framework.response import Response
-import json
-
-class TalepsViewSet(ViewSet):
-    def list(self, request):
-        return Response(
-            data=json.loads({
-                "Hello": "World"
-            }),
-            status=200
-        )
-    
-    def retrieve(self, request, pk=None):
-        return Response(
-            data=json.loads({
-                "Hello": "World"
-            }),
-            status=200
-        ) 
+class TalepsViewSet(ModelViewSet):
+    queryset = TalepLocation.objects.select_related("address").all()
+    serializer_class = LocationSerializer
+    http_method_names = ["options", "head", "get"]
+    pagination_class = LocationPagination
