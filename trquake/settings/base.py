@@ -140,7 +140,7 @@ STATIC_ROOT = BASE_DIR / "statics" / "root"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://trquake-queue:6379")
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://trquake-redis:6379")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
