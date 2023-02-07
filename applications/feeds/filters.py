@@ -23,6 +23,6 @@ class LocationFilterBackend(filters.BaseFilterBackend):
         if timestamp__gte:
             queryset = queryset.filter(raw__timestamp__gte=timestamp__gte)
         if timestamp__lte:
-            queryset = queryset.filter(raw__timestamp__created_at__lte=timestamp__lte)
+            queryset = queryset.filter(raw__timestamp__lte=timestamp__lte)
 
         return queryset
