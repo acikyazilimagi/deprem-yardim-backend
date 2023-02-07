@@ -11,7 +11,7 @@ info:
     url: https://discord.gg/itdepremyardim
   version: 0.0.1
 servers:
-  - url: https://petstore3.swagger.io/api/v3
+  - url: https://api.afetharita.com/
 tags:
   - name: location
     description: Location data to pinpoint exact address.
