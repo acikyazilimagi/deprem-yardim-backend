@@ -11,7 +11,7 @@ info:
     url: https://discord.gg/itdepremyardim
   version: 0.0.1
 servers:
-  - url: https://api.afetharita.com/
+  - url: https://petstore3.swagger.io/api/v3
 tags:
   - name: location
     description: Location data to pinpoint exact address.
@@ -44,6 +44,24 @@ paths:
       operationId: locationByArea
       parameters:
         - name: ne_lat
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+        - name: ne_lng
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+        - name: sw_lat
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+        - name: sw_lng
           in: query
           description: Status values that need to be considered for filter
           required: true
