@@ -3,14 +3,13 @@ import environ
 
 env = environ.Env()
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": "5432",
+        "NAME": env.str("POSTGRES_DB", "postgres"),
+        "USER": env.str("POSTGRES_USER", ""),
+        "PASSWORD": env.str("POSTGRES_PASSWORD", ""),
+        "HOST": env.str("POSTGRES_HOST", "localhost"),
+        "PORT": env.str("PORT", "5432"),
     }
 }

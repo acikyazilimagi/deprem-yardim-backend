@@ -20,24 +20,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 APPLICATIONS_DIR = BASE_DIR / "applications"
 sys.path.append(str(APPLICATIONS_DIR))
 
-
 env = environ.Env()
 
 ENV_FILE = BASE_DIR / ".env"
 if Path.is_file(ENV_FILE):
     env.read_env(str(ENV_FILE))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("DJANGO_SECRET_KEY")
+SECRET_KEY = env.str("DJANGO_SECRET_KEY", "v0bhvhcarv6rh(wj2y$v$(b%5u$tq@i)h@^erp)$7rmmjql0#=")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -90,7 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "trquake.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
@@ -120,7 +116,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -128,7 +123,6 @@ LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -141,16 +135,13 @@ STATIC_ROOT = BASE_DIR / "statics" / "root"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://trquake-queue:6379")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
-
-ZEKAI_USERNAME = env("ZEKAI_USERNAME")
-ZEKAI_PASSWORD = env("ZEKAI_PASSWORD")
-
+ZEKAI_USERNAME = env.str("ZEKAI_USERNAME", "")
+ZEKAI_PASSWORD = env.str("ZEKAI_PASSWORD", "")
 
 LOGGING = {
     "version": 1,
