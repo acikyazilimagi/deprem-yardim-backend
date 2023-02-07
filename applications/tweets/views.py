@@ -2,23 +2,15 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.views import APIView
 from rest_framework.exceptions import ValidationError
+from django.db.models import Q, Count
 
 from core.pagination import LocationPagination
 from tweets.models import Location
 from tweets.serializers import LocationSerializer
-
-
-CITY_LIST = [
-    ["Kahramanmaraş", "Kahramanmaras"],
-    ["Gaziantep"],
-    ["Hatay"],
-    ["Adana"],
-    ["Adıyaman", "Adiyaman"],
-    ["Malatya"],
-    ["Urfa"],
-    ["Diyarbakır", "Diyarbakir", "Dıyarbakır", "Dıyarbakir"],
-]
+import operator
+from functools import reduce
 
 
 class LocationViewSet(ModelViewSet):
@@ -84,3 +76,32 @@ class AreaViewSet(GenericViewSet):
             data={"count": self.queryset.count(), "results": serializer.data},
             status=status.HTTP_200_OK,
         )
+
+
+class CityByCityCountView(APIView):
+    CITY_LIST = {
+        "Kahramanmaraş": ["Kahramanmaraş", "Kahramanmaras", "Elbistan", "Onikişubat"],
+        "Gaziantep": ["Gaziantep"],
+        "Hatay": ["Hatay", "Antakya", "İskenderun", "Iskenderun"],
+        "Adana": ["Adana"],
+        "Adıyaman": ["Adıyaman", "Adiyaman"],
+        "Malatya": ["Malatya"],
+        "Urfa": ["Urfa"],
+        "Diyarbakır": ["Diyarbakır", "Diyarbakir", "Dıyarbakır", "Dıyarbakir"],
+        "Kilis": ["Kilis", "Kılıs"],
+        "Osmaniye": ["Osmaniye"],
+        "Batman": ["Batman"],
+        "Mersin": ["Mersin", "İçel", "Tarsus", "Icel"],
+    }
+
+    def get(self, request: Request) -> Response:
+        kwargs = {}
+        for city, keywords in self.CITY_LIST.items():
+            kwargs[city] = Count(
+                "id",
+                filter=reduce(
+                    operator.or_, (Q(formatted_address__icontains=k) for k in keywords)
+                ),
+            )
+
+        return Response(data=Location.objects.aggregate(**kwargs))
