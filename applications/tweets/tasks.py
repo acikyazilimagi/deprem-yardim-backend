@@ -19,7 +19,7 @@ def collect_tweets():
         ).timestamp()
     )
 
-    query = f"""("1.kat" OR "2.kat" OR "3.kat" OR "4.kat" OR "5.kat" OR "6.kat" OR "7.kat" OR "8.kat" OR "9.kat" OR "10.kat" OR "11.kat") OR ("birincikat" OR "ikincikat" OR "üçüncükat" OR "dördüncükat" OR "beşincikat" OR "altıncıkat" OR "yedincikat" OR "sekizincikat" OR "dokuzuncukat" OR "onuncukat" OR "onbirincikat") OR ("bina" OR "apartman" OR "apt" OR "mahalle" OR "mahallesi" OR "bulvar" OR "sokak" OR "bulvarı" OR "göçük altında" OR "daire" OR "afad" OR "sk" OR "no:") lang:tr since_time:{since_time}"""
+    query = f"""("1.kat" OR "2.kat" OR "3.kat" OR "4.kat" OR "5.kat" OR "6.kat" OR "7.kat" OR "8.kat" OR "9.kat" OR "10.kat" OR "11.kat") OR ("birincikat" OR "ikincikat" OR "üçüncükat" OR "dördüncükat" OR "beşincikat" OR "altıncıkat" OR "yedincikat" OR "sekizincikat" OR "dokuzuncukat" OR "onuncukat" OR "onbirincikat") OR ("bina" OR "apartman" OR "apt" OR "mahalle" OR "mahallesi" OR "bulvar" OR "sokak" OR "bulvarı" OR "göçük altında" OR "daire" OR "afad" OR "sk" OR "no:") lang:tr -is:retweet since_time:{since_time}"""
     df = pd.DataFrame(
         itertools.islice(
             sntwitter.TwitterSearchScraper(f"{query}").get_items(), 9999999

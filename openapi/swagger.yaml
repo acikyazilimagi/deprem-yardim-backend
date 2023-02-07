@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  title: Afet Harita - OpenAPI 3.0
+  description: |-
+    OpenAPI schema for Afet Harita
+
+    Useful Links:
+    - [Acik Kaynak / Deprem Yardim Repository](https://github.com/acikkaynak/deprem-yardim-projesi)
+    - [Acik Kaynak / Deprem Yardim Backend Repository](https://github.com/acikkaynak/deprem-yardim-backend)
+  contact:
+    url: https://discord.gg/itdepremyardim
+  version: 0.0.1
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: location
+    description: Location data to pinpoint exact address.
+  - name: area
+    description: Location data calculation by given area.
+  - name: other
+    description: Other API's
+
+paths:
+  /tweets/location:
+    get:
+      tags:
+        - location
+      summary: Get list of locations.
+      operationId: getLocationList
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+  /tweets/areas:
+    get:
+      tags:
+        - area
+      summary: Finds tweets and addresses by area
+      operationId: locationByArea
+      parameters:
+        - name: ne_lat
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+        - name: ne_lng
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+        - name: sw_lat
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+        - name: sw_lng
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+        '400':
+          description: Please provide given query parameters, or integer value
+  /core/health/:
+    get:
+      tags:
+        - other
+      summary: Finds tweets and addresses by area
+      operationId: healthCheck
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+
+components:
+  schemas:
+    Location:
+      type: object
+      properties:
+        id:
+          type: integer
+        formatted_address:
+          type: string
+        loc:
+          type: array
+          items:
+            type: number
+        viewport:
+          type: object
+          properties:
+            northeast:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+            southwest:
+              type: object
+              properties:
+                lat:
+                  type: number
+                lng:
+                  type: number
+        raw:
+          type: object
+          properties:
+            full_text:
+              type: string
+            tweet_id:
+              type: string
+            user_id:
+              type: string
+            name:
+              type: string
+            screen_name:
+              type: string
+        resolution:
+          type: object
+          properties:
+            address:
+              type: string
+            city:
+              type: string
+            distinct:
+              type: string
+            neighbourhood:
+              type: string
+            street:
+              type: string
+            no:
+              type: string
+            name_surname:
+              type: string
+            tel:
+              type: string
