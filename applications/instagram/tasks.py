@@ -3,7 +3,7 @@ from trquake.celery import app
 import logging
 from django.conf import settings
 from instagrapi import Client
-from instagrapi.exceptions import ClientError, LoginRequired, BadPassword
+from instagrapi.exceptions import ClientError, LoginRequired, BadPassword, ChallengeRequired
 
 from instagram.models import Hashtag, InstagramPost, InstagramSession
 
@@ -72,6 +72,10 @@ def collect_instagram_posts():
             logger.error(
                 f"Error logging in: {e}. Attempting to keep without authentication"
             )
+        except ChallengeRequired:
+            logger.error(
+                "Challenge is required to login, it can be solved using the `create_instagram_session` command, attempting to keep without authentication"
+            ) 
     try:
         for hashtag in Hashtag.objects.all():
             data = []
