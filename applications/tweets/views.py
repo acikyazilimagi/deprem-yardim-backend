@@ -2,10 +2,23 @@ from rest_framework import status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.exceptions import ValidationError
 
-from core.pagination import LocationPagination, AreaPagination
+from core.pagination import LocationPagination
 from tweets.models import Location
 from tweets.serializers import LocationSerializer
+
+
+CITY_LIST = [
+    ["Kahramanmaraş", "Kahramanmaras"],
+    ["Gaziantep"],
+    ["Hatay"],
+    ["Adana"],
+    ["Adıyaman", "Adiyaman"],
+    ["Malatya"],
+    ["Urfa"],
+    ["Diyarbakır", "Diyarbakir", "Dıyarbakır", "Dıyarbakir"],
+]
 
 
 class LocationViewSet(ModelViewSet):
@@ -14,11 +27,10 @@ class LocationViewSet(ModelViewSet):
     http_method_names = ["options", "head", "get"]
     pagination_class = LocationPagination
 
+
 class AreaViewSet(GenericViewSet):
     serializer_class = LocationSerializer
-
-    def get_queryset(self):
-        return Location.objects.select_related("address", "address__tweet").all()
+    queryset = Location.objects.select_related("address", "address__tweet").all()
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         """
@@ -45,29 +57,30 @@ class AreaViewSet(GenericViewSet):
         sw_lng = self.request.query_params.get("sw_lng")
 
         if not ne_lat:
-            return Response("Please provide ne_lat", status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError("Please provide ne_lat in query parameters")
         if not ne_lng:
-            return Response("Please provide ne_lng", status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError("Please provide ne_lng in query parameters")
         if not sw_lat:
-            return Response("Please provide sw_lat", status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError("Please provide sw_lat in query parameters")
         if not sw_lng:
-            return Response("Please provide sw_lng", status=status.HTTP_400_BAD_REQUEST)
+            raise ValidationError("Please provide sw_lng in query parameters")
         try:
             ne_lat = float(ne_lat)
             ne_lng = float(ne_lng)
             sw_lat = float(sw_lat)
             sw_lng = float(sw_lng)
         except ValueError:
-            return Response("Please provide float value.")
+            raise ValidationError("Please provide float value.")
 
-        self.queryset = self.get_queryset()
-
-        self.queryset = self.queryset.filter(
+        self.queryset = self.get_queryset().filter(
             northeast_lat__lte=ne_lat,
             northeast_lng__gte=ne_lng,
             southwest_lat__lte=sw_lat,
-            southwest_lng__gte=sw_lng
+            southwest_lng__gte=sw_lng,
         )
 
         serializer = self.serializer_class(self.queryset, many=True)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            data={"count": self.queryset.count(), "results": serializer.data},
+            status=status.HTTP_200_OK,
+        )
