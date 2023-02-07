@@ -19,12 +19,12 @@ class AreaViewSet(GenericViewSet):
     pagination_class = AreaPagination
 
     def get_queryset(self):
-        return Location.objects.select_related("address", "address_tweet").all()
+        return Location.objects.select_related("address", "address__tweet").all()
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         ne_lat = self.request.query_params.get("ne_lat")
         ne_lng = self.request.query_params.get("ne_lng")
-        sw_lat = self.request.query_params.get("se_lat")
+        sw_lat = self.request.query_params.get("sw_lat")
         sw_lng = self.request.query_params.get("sw_lng")
 
         if not ne_lat:
@@ -35,6 +35,13 @@ class AreaViewSet(GenericViewSet):
             return Response("Please provide sw_lat", status=status.HTTP_400_BAD_REQUEST)
         if not sw_lng:
             return Response("Please provide sw_lng", status=status.HTTP_400_BAD_REQUEST)
+        try:
+            ne_lat = float(ne_lat)
+            ne_lng = float(ne_lng)
+            sw_lat = float(sw_lat)
+            sw_lng = float(sw_lng)
+        except ValueError:
+            return Response("Please provide float value.")
 
         self.queryset = self.get_queryset()
 
