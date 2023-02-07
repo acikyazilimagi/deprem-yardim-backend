@@ -14,10 +14,10 @@ class LocationPagination(PageNumberPagination):
 
 class AreaPagination(PageNumberPagination):
     """
-    Custom pagination for the Area API.
+    UNUSED for now: Custom pagination for the Area API.
 
-    Max page size is set to 200 and can be changed depending on our choice.
+    Max page size is set to 4000 and can be changed depending on our choice.
     """
     page_size_query_param = "page_size"
-    max_page_size = 200
+    max_page_size = 4000
     page_size = 50
