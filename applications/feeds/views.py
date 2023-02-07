@@ -71,8 +71,8 @@ class AreaViewSet(GenericViewSet):
 
         return self.queryset.filter(
             northeast_lat__lte=ne_lat,
-            northeast_lng__gte=ne_lng,
-            southwest_lat__lte=sw_lat,
+            northeast_lng__lte=ne_lng,
+            southwest_lat__gte=sw_lat,
             southwest_lng__gte=sw_lng,
         )
 
