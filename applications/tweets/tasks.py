@@ -43,6 +43,7 @@ def collect_tweets():
         process_entry.apply_async(kwargs={"entry_id": entry.id})
 
 
+@app.task
 def collect_deprem_address_tweets():
     data = []
     since_time = int(
