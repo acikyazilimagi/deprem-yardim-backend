@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     # apps
     "tweets",
     "core",
+    "feeds",
 ]
 
 MIDDLEWARE = [
