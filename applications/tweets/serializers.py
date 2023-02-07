@@ -21,3 +21,4 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ["id", "formatted_address", "loc", "viewport", "raw", "resolution"]
+
