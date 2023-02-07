@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+import requests
+from django.conf import settings
+from django.db.models import Prefetch
 
 
 class Tweet(models.Model):
@@ -13,6 +16,18 @@ class Tweet(models.Model):
     hashtags = ArrayField(base_field=models.CharField(max_length=255), null=True)
     user_account_created_at = models.DateTimeField(null=True, blank=True)
     media = models.CharField(max_length=512, null=True)
+    
+    @property
+    def is_deleted(self):
+        url = f"https://api.twitter.com/2/tweets/{self.tweet_id}"
+        payload={}
+        headers = {
+            'Authorization': f'Bearer {settings.TWITTER_BEARER_TOKEN}'
+        }
+        response = requests.request("GET", url, headers=headers, data=payload)
+        data = response.text
+
+        return data.errors[0].type == "https://api.twitter.com/2/problems/resource-not-found"
 
     class Meta:
         ordering = ["-id"]
@@ -33,6 +48,16 @@ class Address(models.Model):
     class Meta:
         ordering = ["-id"]
 
+class LocationManager(models.Manager):
+    @property
+    def get_locations_without_deleted_tweet(self):
+        return self.prefetch_related(
+            Prefetch(
+                "address__tweet",
+                queryset=Tweet.objects.exclude(is_deleted=True),
+                to_attr="tweets"
+            )
+        ).filter(address__tweet__in=F("tweets")).distinct()
 
 class Location(models.Model):
     address = models.ForeignKey("tweets.Address", on_delete=models.CASCADE)
@@ -44,6 +69,7 @@ class Location(models.Model):
     southwest_lat = models.FloatField(default=0.0)
     southwest_lng = models.FloatField(default=0.0)
     is_approved = models.BooleanField(default=False)
+    objects = LocationManager()
 
     @property
     def loc(self):

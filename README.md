@@ -56,6 +56,7 @@ CELERY_BROKER_URL=trquake-redis
 ZEKAI_USERNAME= # zekai.io kullanıcı adı
 ZEKAI_PASSWORD= # zekai.io şifre
 DEFAULT_ADMIN_PASSWORD= # ilk oluşturulan admin kullanıcısı için şifre
+TWITTER_BEARER_TOKEN= # Twitter Developer Portal üzerinden alınmalı
 ```
 
 Django Secret key oluşturmak için:
