@@ -57,7 +57,7 @@
     }
   ],
   "placementConstraints": [],
-  "memory": 1024,
+  "memory": "1024",
   "taskRoleArn": "arn:aws:iam::630179636432:role/ecsTaskExecutionRole",
   "compatibilities": [
     "EC2",
@@ -130,7 +130,7 @@
     "operatingSystemFamily": "LINUX",
     "cpuArchitecture": null
   },
-  "cpu": 512,
+  "cpu": "512",
   "revision": 3,
   "status": "ACTIVE",
   "inferenceAccelerators": null,
