@@ -23,4 +23,5 @@ urlpatterns = [
     path("core/", include("core.urls")),
     path("tweets/", include("tweets.urls")),
     path("taleps/", include("taleps.urls")),
+    path("feeds/", include("feeds.urls")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
