@@ -16,8 +16,12 @@ app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     # Executes every Monday morning at 7:30 a.m.
-    'collect_tweets': {
-        'task': 'tweets.tasks.collect_tweets',
-        'schedule': 300.0,
+    "collect_tweets": {
+        "task": "tweets.tasks.collect_tweets",
+        "schedule": 300.0,
+    },
+    "collect_deprem_address_tweets": {
+        "task": "tweets.tasks.collect_deprem_address_tweets",
+        "schedule": 300.0,
     },
 }
