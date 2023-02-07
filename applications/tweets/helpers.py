@@ -11,6 +11,23 @@ import json
 
 logger = logging.getLogger(__name__)
 
+def create_address(processed_address=None,full_address=None,tweet=None):
+    city = processed_address.get("city")
+    allowed_cities = ["Gaziantep", "Malatya", "Batman", "Bingöl", "Elazığ", "Kilis", "Diyarbakır", "Mardin", "Siirt", "Şırnak", "Van", "Muş", "Bitlis", "Hakkari", "Adana", "Osmaniye","Hatay'"]
+
+    if city in allowed_cities or city == None:
+        return Address.objects.create(
+            tweet_id=tweet.id,
+            address=full_address,
+            city=processed_address.get("city"),
+            distinct=processed_address.get("distinct"),
+            neighbourhood=processed_address.get("neighbourhood"),
+            street=processed_address.get("street"),
+            no=processed_address.get("no"),
+            name_surname=processed_address.get("name_surname"),
+            tel=processed_address.get("tel"),
+        )
+    
 def ask_to_zekai(headers: Dict[str, str], tweet: Tweet) -> None:
     submit_url = "https://zekai.co/author-api/v1/submit-text"
     ty_geolocation_url = "https://public-sdc.trendyol.com/discovery-web-websfxgeolocation-santral/geocode"
@@ -68,17 +85,9 @@ def ask_to_zekai(headers: Dict[str, str], tweet: Tweet) -> None:
         if not full_address:
             return
         
-        address = Address.objects.create(
-            tweet_id=tweet.id,
-            address=full_address,
-            city=processed_address.get("city"),
-            distinct=processed_address.get("distinct"),
-            neighbourhood=processed_address.get("neighbourhood"),
-            street=processed_address.get("street"),
-            no=processed_address.get("no"),
-            name_surname=processed_address.get("name_surname"),
-            tel=processed_address.get("tel"),
-        )
+        address = create_address(processed_address, full_address, tweet)
+        if not address:
+            return
 
         geolocation_response = requests.get(
             url=ty_geolocation_url, params={"address": full_address}
