@@ -9,6 +9,7 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from core.pagination import LocationPagination
 
 from feeds.models import Entry, Location
+from feeds.filters import LocationFilterBackend
 from feeds.serializers import EntrySerializer, LocationSerializer
 from feeds.tasks import write_bulk_entries
 from rest_framework import status
@@ -24,6 +25,7 @@ class EntryViewSet(ModelViewSet):
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
     http_method_names = ["options", "head", "post", "get"]
+    
 
 
 class BulkEntryView(APIView):
@@ -41,6 +43,8 @@ class LocationViewSet(ModelViewSet):
     serializer_class = LocationSerializer
     http_method_names = ["options", "head", "get"]
     pagination_class = LocationPagination
+    filter_backends = [LocationFilterBackend]
+
 
 
 class AreaViewSet(GenericViewSet):
