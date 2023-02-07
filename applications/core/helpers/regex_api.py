@@ -1,12 +1,14 @@
-import re
 import unidecode
 import pandas as pd
 import copy
-import numpy as np
 import re
+from django.conf import settings
+from typing import Dict, Union, Optional
 
-mahalle_list = ["(mahallesi)", "(mah.)", "(mh\.)", "(mh)"]
-sokak_list = [
+DATA_PATH = settings.APPLICATIONS_DIR / "core" / "helpers" / "data"
+
+neighbourhood_list = ["(mahallesi)", "(mah.)", "(mh\.)", "(mh)"]
+street_list = [
     "sokağı",
     "sokagi",
     "caddesi",
@@ -36,53 +38,55 @@ site_list = [
     "apt",
     "konutlari",
 ]
-blok_list = ["blok", "etap", "kisim", "kısım"]
+block_list = ["blok", "etap", "kisim", "kısım"]
 
 
-
-df = pd.read_csv("il_ilce_v2.csv")
-il_pattern = re.compile(
+df = pd.read_csv(str(DATA_PATH / "il_ilce_v2.csv"))
+city_pattern = re.compile(
     r"(" + "|".join(df["processed_il"].tolist()) + ")", re.IGNORECASE
 )
-ilçe_pattern = re.compile(
+distinct_pattern = re.compile(
     r"(" + "|".join(df["processed_ilce"].tolist()) + ")", re.IGNORECASE
 )
-mahalle_pattern = re.compile(
+neighbourhood_pattern = re.compile(
     r"(" + "|".join(df["processed_mahalle"].tolist()) + ")", re.IGNORECASE
 )
-mahalle_pattern_v2 = re.compile(
-    r"((\d+\.)|([A-Za-zÖŞĞÇİÜı0-9]+))\s+\b(" + "|".join(mahalle_list) + r")\b",
+neighbourhood_pattern_v2 = re.compile(
+    r"((\d+\.)|([A-Za-zÖŞĞÇİÜı0-9]+))\s+\b(" + "|".join(neighbourhood_list) + r")\b",
     re.IGNORECASE,
 )
-sokak_cadde_bulvar_yol_pattern = re.compile(
-    r"(((\d+\.)|(\w+))\s+(" + "|".join(sokak_list) + "))", re.IGNORECASE
+street_road_boulevard_pattern = re.compile(
+    r"(((\d+\.)|(\w+))\s+(" + "|".join(street_list) + "))", re.IGNORECASE
 )
-site_apartman_pattern = re.compile(
+site_apartment_pattern = re.compile(
     r"(((\d+\.)|(\w+))\s+(" + "|".join(site_list) + "))", re.IGNORECASE
 )
-blok_pattern = re.compile(
-    r"(((\d+\.)|(\w+))\s+(" + "|".join(blok_list) + "))", re.IGNORECASE
+block_pattern = re.compile(
+    r"(((\d+\.)|(\w+))\s+(" + "|".join(block_list) + "))", re.IGNORECASE
 )
-kat_pattern = re.compile(
+floor_pattern = re.compile(
     r"((\d+\.?(\s+)?(kat))|(kat(\s+)?\d+)|(kat:(\s+)?\d+))", re.IGNORECASE
 )
-daire_no_pattern = re.compile(
+apartment_no_pattern = re.compile(
     r"((no(\s+)?\d+)|(daire no(\s+?)\d+)|(daire(\s+?)\d+)|([Dd]\s?([0-9]+)))",
     re.IGNORECASE,
 )
-telefon_no_pattern = re.compile(
+phone_number_pattern = re.compile(
     r"[+]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+", re.IGNORECASE
 )
-il_dict = dict(zip(df["processed_il"].tolist(), df["il"].tolist()))
-ilçe_dict = dict(zip(df["processed_ilce"].tolist(), df["ilçe"].tolist()))
-mahalle_dict = dict(zip(df["processed_mahalle"].tolist(), df["mahalle"].tolist()))
+city_dict = dict(zip(df["processed_il"].tolist(), df["il"].tolist()))
+distinct_dict = dict(zip(df["processed_ilce"].tolist(), df["ilçe"].tolist()))
+neighbourhood_dict = dict(zip(df["processed_mahalle"].tolist(), df["mahalle"].tolist()))
 remove_punct_pattern = re.compile(
-    r"[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+\ *", re.IGNORECASE
+    r"[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+\s*", re.IGNORECASE
 )
 number_regex = re.compile(r"\d{1,}", re.IGNORECASE)
 
 
 class ExtractInfo:
+    result: Dict[str, Optional[Union[str, int]]]
+    text: str
+
     def __init__(self):
         self.stopword_list = [
             "yardım",
@@ -120,34 +124,48 @@ class ExtractInfo:
             else False
         )
 
-    def get_sim_based_city_ilce_mahalle(self):
+    def get_sim_based_city_distinct_neighbourhood(self):
         for token in self.text.split():
             token_lower = token.translate(str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")).lower()
 
-            for city in il_dict.values():
+            for city in city_dict.values():
                 city_lower = city.translate(str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")).lower()
 
-                if textdistance.levenshtein.normalized_similarity(token, city) >= 0.9:
-                    self.result["il"] = city
+                if (
+                    textdistance.levenshtein.normalized_similarity(
+                        token_lower, city_lower
+                    )
+                    >= 0.9
+                ):
+                    self.result["city"] = city
                     break
 
-            for ilçe in ilçe_dict.values():
-                ilçe_lower = ilçe.translate(str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")).lower()
-
-                if textdistance.levenshtein.normalized_similarity(token, ilçe) >= 0.9:
-                    self.result["ilçe"] = ilçe
-                    break
-
-            for mahalle in mahalle_dict.values():
-                mahalle_lower = mahalle.translate(
+            for distinct in distinct_dict.values():
+                distinct_lower = distinct.translate(
                     str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")
                 ).lower()
 
                 if (
-                    textdistance.levenshtein.normalized_similarity(token, mahalle_lower)
+                    textdistance.levenshtein.normalized_similarity(
+                        token_lower, distinct_lower
+                    )
                     >= 0.9
                 ):
-                    self.result["mahalle"] = mahalle
+                    self.result["distinct"] = distinct
+                    break
+
+            for neighbourhood in neighbourhood_dict.values():
+                neighbourhood_lower = neighbourhood.translate(
+                    str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")
+                ).lower()
+
+                if (
+                    textdistance.levenshtein.normalized_similarity(
+                        token_lower, neighbourhood_lower
+                    )
+                    >= 0.9
+                ):
+                    self.result["neighbourhood"] = neighbourhood
                     break
 
     def get_until_stopword(self, text, key):
@@ -170,14 +188,14 @@ class ExtractInfo:
     def extract(self, text):
         self.text = " ".join(text.strip().split())
         self.result = {
-            "sehir": "",
-            "ilce": "",
-            "mahalle": "",
-            "sokak_cadde_bulvar_yol": "",
-            "site_apartman_bina": "",
-            "blok": "",
-            "kat": "",
-            "daire_no": "",
+            "city": None,
+            "distinct": None,
+            "neighbourhood": None,
+            "street_road": None,
+            "apartment": None,
+            "block": None,
+            "floor": None,
+            "apartment_no": None,
             "excessData": {},
             "originalText": copy.deepcopy(text),
         }
@@ -185,156 +203,166 @@ class ExtractInfo:
         self.text = remove_punct_pattern.sub(" ", self.text)
         unidecoded_text = self.process_text(self.text)
 
-        # extract şehir
+        # extract city
         try:
-            extracted_il = il_pattern.findall(unidecoded_text)[0]
+            extracted_il = city_pattern.findall(unidecoded_text)[0]
             unidecoded_text = unidecoded_text.replace(extracted_il, "")
-            self.result["sehir"] = il_dict[extracted_il].title()
-        except:
-            self.result["sehir"] = ""
+            self.result["city"] = city_dict[extracted_il].title()
+        except Exception as e:
+            print(str(e))
+            self.result["city"] = ""
 
-        # extract ilçe
+        # extract distinct
         try:
-            extracted_ilçe = ilçe_pattern.findall(unidecoded_text)[0]
-            unidecoded_text = unidecoded_text.replace(extracted_ilçe, "")
-            self.result["ilce"] = ilçe_dict[extracted_ilçe].title()
-        except:
-            self.result["ilce"] = ""
+            extracted_distinct = distinct_pattern.findall(unidecoded_text)[0]
+            unidecoded_text = unidecoded_text.replace(extracted_distinct, "")
+            self.result["distinct"] = distinct_dict[extracted_distinct].title()
+        except Exception as e:
+            print(str(e))
+            self.result["distinct"] = ""
 
         # extract mahalle
         try:
-            self.result["mahalle"] = mahalle_pattern_v2.findall(self.text)[0][0].strip()
+            self.result["neighbourhood"] = neighbourhood_pattern_v2.findall(self.text)[
+                0
+            ][0].strip()
             # extended_mahalle = self.get_until_stopword(self.result["originalText"], self.result["mahalle"])
             # self.result["mahalle"] = extended_mahalle
-            self.text = self.text.replace(self.result["mahalle"], "")
+            self.text = self.text.replace(self.result["neighbourhood"], "")
 
-        except:
+        except Exception as e:
+            print(str(e))
             try:
-                extracted_mahalle = mahalle_pattern.findall(unidecoded_text)[0]
-                unidecoded_text = unidecoded_text.replace(extracted_mahalle, "")
-                self.result["mahalle"] = mahalle_dict[extracted_mahalle]
-            except:
-                self.result["mahalle"] = ""
+                extracted_neighbourhood = neighbourhood_pattern.findall(unidecoded_text)[0]
+                # unidecoded_text = unidecoded_text.replace(extracted_extracted_neighbourhood, "")
+                self.result["neighbourhood"] = neighbourhood_dict[extracted_neighbourhood]
+            except Exception as e:
+                print(str(e))
+                self.result["neighbourhood"] = ""
 
-        # extract sokak / cadde
+        # extract street / road
         try:
-            self.result[
-                "sokak_cadde_bulvar_yol"
-            ] = sokak_cadde_bulvar_yol_pattern.findall(self.text)[0][1].strip()
-            # extended_sokak = self.get_until_stopword(self.result["originalText"], self.result["sokak_cadde_bulvar_yol"])
-            # self.result["sokak_cadde_bulvar_yol"] = extended_sokak
-            self.text = self.text.replace(self.result["sokak_cadde_bulvar_yol"], "")
-        except:
-            self.result["sokak_cadde_bulvar_yol"] = ""
-
-        # extract site / apartman / bina
-
-        try:
-            self.result["site_apartman_bina"] = site_apartman_pattern.findall(
+            self.result["street_road"] = street_road_boulevard_pattern.findall(
                 self.text
             )[0][1].strip()
-            # extended_site = self.get_until_stopword(self.result["originalText"], self.result["site_apartman_bina"])
-            # self.result["site_apartman_bina"] = extended_site
-            self.text = self.text.replace(self.result["site_apartman_bina"], "")
-        except:
-            self.result["site_apartman_bina"] = ""
+            self.text = self.text.replace(self.result["street_road"], "")
+        except Exception as e:
+            print(str(e))
+            self.result["street_road"] = ""
 
-        # extract blok
+        # extract site / apartment / bina
+
         try:
-            self.result["blok"] = blok_pattern.findall(self.text)[0][0].strip()
-            self.text = self.text.replace(self.result["blok"], "")
-            self.result["blok"] = self.result["blok"].replace("blok", "").strip()
-        except:
-            self.result["blok"] = ""
+            self.result["apartment"] = site_apartment_pattern.findall(self.text)[0][
+                1
+            ].strip()
+            # extended_site = self.get_until_stopword(self.result["originalText"], self.result["site_apartman_bina"])
+            # self.result["site_apartment_bina"] = extended_site
+            self.text = self.text.replace(self.result["apartment"], "")
+        except Exception as e:
+            print(str(e))
+            self.result["apartment"] = ""
+
+        # extract block
+        try:
+            self.result["block"] = block_pattern.findall(self.text)[0][0].strip()
+            self.text = self.text.replace(self.result["block"], "")
+            self.result["block"] = self.result["block"].replace("block", "").strip()
+        except Exception as e:
+            print(str(e))
+            self.result["block"] = ""
 
         # extract kat
 
         try:
-            self.result["kat"] = kat_pattern.findall(self.text)[0][0].strip()
-            self.text = self.text.replace(self.result["kat"], "")
-            self.result["kat"] = int(
-                self.result["kat"].lower().replace("kat", "").strip()
-            )
-        except:
-            self.result["kat"] = ""
+            self.result["floor"] = floor_pattern.findall(self.text)[0][0].strip()
+            self.text = self.text.replace(self.result["floor"], "")
+            self.result["floor"] = int(self.result["floor"].lower().replace("floor", "").strip())
+        except Exception as e:
+            print(str(e))
+            self.result["floor"] = ""
 
-        # extract daire no
+        # extract apartment no
         try:
-            self.result["daire_no"] = daire_no_pattern.findall(self.text)[0][0].strip()
-            self.text = self.text.replace(self.result["daire_no"], "")
-            self.result["daire_no"] = int(
-                self.result["daire_no"]
+            self.result["apartment_no"] = apartment_no_pattern.findall(self.text)[0][
+                0
+            ].strip()
+            self.text = self.text.replace(self.result["apartment_no"], "")
+            self.result["apartment_no"] = int(
+                self.result["apartment_no"]
                 .lower()
                 .replace("no", "")
                 .replace("daire", "")
                 .replace("d ", "")
                 .strip()
             )
-        except:
-            self.result["daire_no"] = ""
+        except Exception as e:
+            print(str(e))
+            self.result["apartment_no"] = ""
 
-        # extract telefon
+        # extract phone
         try:
             phone_number = [
                 phone_number
                 for phone_number in sorted(
                     re.findall(
-                        r"[+]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+",
+                        r"[+]?\d+\s?\d+\s?\d+\s?\d+\s?\d+",
                         self.text,
                     ),
                     key=len,
                     reverse=True,
                 )
-                if len(phone_number) >= 9 and len(phone_number) <= 18
+                if 9 <= len(phone_number) <= 18
             ][0]
             self.result["excessData"]["phone"] = (
                 phone_number
-                if len(phone_number) >= 9 and len(phone_number) <= 18
+                if 9 <= len(phone_number) <= 18
                 else ""
             )
             self.text = self.text.replace(self.result["excessData"]["phone"], "")
 
-        except:
+        except Exception as e:
+            print(str(e))
             self.result["excessData"]["phone"] = ""
 
-        self.concataneate_addres()
+        self.concat_address()
         self.calculate_score()
         return self.result
 
-    def concataneate_addres(self):
-        adres_str = ""
+    def concat_address(self):
+        address_str = ""
         for key, value in self.result.items():
             if value != "":
-                if key == "sehir":
-                    adres_str = adres_str + value + " ili "
-                if key == "ilçe":
-                    adres_str = adres_str + value + " ilcesi "
-                if key == "mahalle":
-                    adres_str = adres_str + value + " mahallesi "
-                if key == "sokak_cadde_bulvar_yol":
-                    adres_str = adres_str + value + " caddesi "
-                if key == "site_apartman_bina":
-                    adres_str = adres_str + value + " apartmani "
-        self.result["adres"] = adres_str
+                if key == "city":
+                    address_str = address_str + value + " ili "
+                if key == "distinct":
+                    address_str = address_str + value + " ilcesi "
+                if key == "neighbourhood":
+                    address_str = address_str + value + " mahallesi "
+                if key == "street_road":
+                    address_str = address_str + value + " caddesi "
+                if key == "apartment":
+                    address_str = address_str + value + " apartmani "
+        self.result["address"] = address_str
 
     def calculate_score(self):
         weighted_score = 0
 
-        if self.result["sehir"] != "":
+        if self.result["city"] != "":
             weighted_score += 5
-        if self.result["ilce"] != "":
+        if self.result["distinct"] != "":
             weighted_score += 5
-        if self.result["mahalle"] != "":
+        if self.result["neighbourhood"] != "":
             weighted_score += 4
-        if self.result["sokak_cadde_bulvar_yol"] != "":
+        if self.result["street_road"] != "":
             weighted_score += 3
-        if self.result["site_apartman_bina"] != "":
+        if self.result["apartment"] != "":
             weighted_score += 3
-        if self.result["blok"] != "":
+        if self.result["block"] != "":
             weighted_score += 1
-        if self.result["kat"] != "":
+        if self.result["floor"] != "":
             weighted_score += 1
-        if self.result["daire_no"] != "":
+        if self.result["apartment_no"] != "":
             weighted_score += 1
         if self.result["excessData"]["phone"] != "":
             weighted_score += 1

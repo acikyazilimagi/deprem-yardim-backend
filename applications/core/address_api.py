@@ -1,5 +1,6 @@
-from helpers.trendyol_bff import TY_BFF
-from helpers.regex_api import ExtractInfo
+from core.helpers.trendyol_bff import TY_BFF
+from core.helpers.regex_api import ExtractInfo
+
 
 class AddressAPI:
     def __init__(self):

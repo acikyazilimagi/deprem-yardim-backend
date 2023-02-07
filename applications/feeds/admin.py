@@ -1,5 +1,5 @@
 from django.contrib import admin
-from feeds.models import Entry
+from feeds.models import Entry, Location
 
 
 @admin.register(Entry)
@@ -10,3 +10,11 @@ class EntryAdmin(admin.ModelAdmin):
 
     class Meta:
         model = Entry
+
+
+@admin.register(Location)
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ["formatted_address", "latitude", "longitude"]
+
+    class Meta:
+        model = Location

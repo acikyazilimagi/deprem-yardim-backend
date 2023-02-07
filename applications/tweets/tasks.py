@@ -1,11 +1,13 @@
-from tweets.models import Tweet
-from tweets.helpers import bulk_ask_to_zekai
 from trquake.celery import app
 import pandas as pd
 import snscrape.modules.twitter as sntwitter
 import itertools
 import datetime
 from pytz import timezone
+from feeds.models import Entry
+from typing import List
+import json
+from feeds.tasks import process_entry
 
 
 @app.task
@@ -36,24 +38,31 @@ def collect_tweets():
         created_at = df["date"][ind]
         full_text = df["rawContent"][ind]
         hashtags = [i for i in df["hashtags"]][ind]
-        user_account_created_at = df['user'][ind]['created']
+        user_account_created_at = df["user"][ind]["created"]
         try:
-            media = df['media'][ind][0]['previewUrl']
+            media = df["media"][ind][0]["previewUrl"]
         except (KeyError, TypeError):
             media = None
-        
+
         data.append(
-            Tweet(
-                user_id=user_id,
-                screen_name=screen_name,
-                name=name,
-                tweet_id=tweet_id,
-                created_at=created_at,
+            Entry(
                 full_text=full_text,
-                hashtags=hashtags,
-                user_account_created_at=user_account_created_at,
-                media=media
+                is_resolved=False,
+                channel="twitter",
+                extra_parameters=json.dumps(
+                    {
+                        "user_id": user_id,
+                        "screen_name": screen_name,
+                        "name": name,
+                        "tweet_id": tweet_id,
+                        "created_at": created_at,
+                        "hashtags": hashtags,
+                        "user_account_created_at": user_account_created_at,
+                        "media": media
+                    }
+                ),
             )
         )
-    created_tweets = Tweet.objects.bulk_create(data)
-    bulk_ask_to_zekai(tweet_data=created_tweets)
+    created_tweets: List[Entry] = Entry.objects.bulk_create(data)
+    for entry in created_tweets:
+        process_entry.apply_async(kwargs={"entry_id": entry.id})

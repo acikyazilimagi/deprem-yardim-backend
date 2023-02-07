@@ -1,13 +1,19 @@
 version: '3.2'
 
+volumes:
+  trquake_postgres: {}
+
+
 services:
-  api:
+  django: &django
     container_name: trquake-app
     build:
-      dockerfile: .docker/api/Dockerfile
-      context: .
+      dockerfile: ./docker/development/Dockerfile
+      context: ./
+    volumes:
+      - ./:/app
     ports:
-      - "8000:80"
+      - "8000:8000"
     environment:
       - DJANGO_SETTINGS_MODULE=trquake.settings.development
       - POSTGRES_PASSWORD=debug
@@ -15,26 +21,8 @@ services:
       - POSTGRES_DB=debug
       - POSTGRES_HOST=trquake-database
       - POSTGRES_PORT=5432
-    depends_on:
-        - database
-        - redis
-
-  workers:
-    container_name: trquake-workers
-    build:
-      dockerfile: .docker/scraper/Dockerfile
-      context: .
-    command: watchmedo auto-restart --directory=/app --pattern=*.py --recursive -- celery -A trquake.celery.app worker -B --concurrency=5 -l DEBUG
-    environment:
-      - DJANGO_SETTINGS_MODULE=trquake.settings.development
-      - POSTGRES_PASSWORD=debug
-      - POSTGRES_USER=debug
-      - POSTGRES_DB=debug
-      - POSTGRES_HOST=trquake-database
-      - POSTGRES_PORT=5432
-    depends_on:
-        - database
-        - redis
+    command:
+      - /start-django
 
   database:
     image: postgres:15.1
@@ -47,23 +35,23 @@ services:
       - POSTGRES_DB=debug
     volumes:
       - trquake_postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
-      interval: 15s
-      timeout: 5s
-      retries: 5
 
-  redis:
-    container_name: trquake-redis
+  workers:
+    <<: *django
+    container_name: trquake-workers
+    ports: []
+    command: watchmedo auto-restart --directory=/app --pattern=*.py --recursive -- celery -A trquake.celery.app worker -B --concurrency=5 -l DEBUG
+    environment:
+      - DJANGO_SETTINGS_MODULE=trquake.settings.development
+      - POSTGRES_PASSWORD=debug
+      - POSTGRES_USER=debug
+      - POSTGRES_DB=debug
+      - POSTGRES_HOST=trquake-database
+      - POSTGRES_PORT=5432
+
+  queue:
+    container_name: trquake-queue
     image: redis:alpine
-    command: redis-server --appendonly yes
-    volumes:
-      - redis_data:/data
     ports:
       - "6379:6379"
-
-volumes:
-  trquake_postgres:
-    driver: local
-  redis_data:
-    driver: local
+    command: redis-server --appendonly yes
