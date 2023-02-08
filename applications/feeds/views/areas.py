@@ -12,7 +12,7 @@ from rest_framework.response import Response
 
 # Applications
 from feeds.models import Location
-from feeds.views.base import BaseAreaViewSet
+from feeds.views import BaseAreaViewSet
 from feeds.serializers import LocationSerializer, LocationLiteSerializer
 from feeds.filters import TimestampFilterBackend
 
