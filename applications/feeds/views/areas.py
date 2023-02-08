@@ -50,10 +50,7 @@ class CityByCityCountView(APIView):
         for city, keywords in self.CITY_LIST.items():
             kwargs[city] = Count(
                 "id",
-                filter=reduce(
-                    operator.or_, (Q(formatted_address__icontains=k) for k in keywords)
-                ),
+                filter=reduce(operator.or_, (Q(formatted_address__icontains=k) for k in keywords)),
             )
 
         return Response(data=Location.objects.aggregate(**kwargs))
-

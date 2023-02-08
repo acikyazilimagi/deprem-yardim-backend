@@ -5,15 +5,14 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('feeds', '0002_alter_entry_channel'),
+        ("feeds", "0002_alter_entry_channel"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='entry',
-            name='extra_parameters',
+            model_name="entry",
+            name="extra_parameters",
             field=models.TextField(blank=True, null=True),
         ),
     ]

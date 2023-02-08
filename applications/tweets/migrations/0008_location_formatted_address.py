@@ -5,15 +5,14 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tweets', '0007_alter_location_options'),
+        ("tweets", "0007_alter_location_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='location',
-            name='formatted_address',
+            model_name="location",
+            name="formatted_address",
             field=models.TextField(blank=True, null=True),
         ),
     ]

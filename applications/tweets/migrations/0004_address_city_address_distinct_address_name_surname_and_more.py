@@ -5,40 +5,39 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tweets', '0003_tweet_media_tweet_user_account_created_at'),
+        ("tweets", "0003_tweet_media_tweet_user_account_created_at"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='address',
-            name='city',
+            model_name="address",
+            name="city",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='address',
-            name='distinct',
+            model_name="address",
+            name="distinct",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='address',
-            name='name_surname',
+            model_name="address",
+            name="name_surname",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='address',
-            name='neighbourhood',
+            model_name="address",
+            name="neighbourhood",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='address',
-            name='no',
+            model_name="address",
+            name="no",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.AddField(
-            model_name='address',
-            name='street',
+            model_name="address",
+            name="street",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
     ]

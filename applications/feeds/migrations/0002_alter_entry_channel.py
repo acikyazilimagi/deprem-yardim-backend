@@ -5,15 +5,22 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('feeds', '0001_initial'),
+        ("feeds", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='entry',
-            name='channel',
-            field=models.CharField(choices=[('twitter', 'twitter'), ('telegram', 'telegram'), ('twitch', 'twitch'), ('discord', 'discord')], max_length=255),
+            model_name="entry",
+            name="channel",
+            field=models.CharField(
+                choices=[
+                    ("twitter", "twitter"),
+                    ("telegram", "telegram"),
+                    ("twitch", "twitch"),
+                    ("discord", "discord"),
+                ],
+                max_length=255,
+            ),
         ),
     ]

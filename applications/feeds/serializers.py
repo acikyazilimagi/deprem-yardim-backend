@@ -49,4 +49,3 @@ class LocationFilterParamSerializer(serializers.Serializer):
 
     timestamp__gte = serializers.DateTimeField(required=False)
     timestamp__lte = serializers.DateTimeField(required=False)
-

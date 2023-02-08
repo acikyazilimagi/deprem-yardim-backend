@@ -1,3 +1,20 @@
+[tool.black]
+line-length = 119
+target-version = ['py38']
+quiet = true
+exclude='''
+/(
+    \.git
+  | \.hg
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
 [tool.poetry]
 name = "trquake"
 version = "0.1.0"

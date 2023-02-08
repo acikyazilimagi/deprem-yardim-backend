@@ -6,15 +6,14 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('feeds', '0003_alter_entry_extra_parameters'),
+        ("feeds", "0003_alter_entry_extra_parameters"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='entry',
-            name='timestamp',
+            model_name="entry",
+            name="timestamp",
             field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
             preserve_default=False,
         ),

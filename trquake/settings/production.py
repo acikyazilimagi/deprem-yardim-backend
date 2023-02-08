@@ -14,8 +14,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 CSRF_TRUSTED_ORIGINS = ["https://*.afetharita.com", "http://*.afetharita.com", "https://afetharita.com"]
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": env("POSTGRES_DB"),
         "USER": env("POSTGRES_USER"),
         "PASSWORD": env("POSTGRES_PASSWORD"),

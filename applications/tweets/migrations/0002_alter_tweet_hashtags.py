@@ -6,15 +6,16 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tweets', '0001_initial'),
+        ("tweets", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='tweet',
-            name='hashtags',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.CharField(max_length=255), null=True, size=None),
+            model_name="tweet",
+            name="hashtags",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.CharField(max_length=255), null=True, size=None
+            ),
         ),
     ]

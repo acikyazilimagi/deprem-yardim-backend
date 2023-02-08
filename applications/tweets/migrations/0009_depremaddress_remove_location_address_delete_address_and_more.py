@@ -5,36 +5,35 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tweets', '0008_location_formatted_address'),
+        ("tweets", "0008_location_formatted_address"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='DepremAddress',
+            name="DepremAddress",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_text', models.TextField()),
-                ('tweet_id', models.CharField(max_length=255)),
-                ('screen_name', models.CharField(max_length=512)),
-                ('created_at', models.DateTimeField(blank=True, null=True)),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("full_text", models.TextField()),
+                ("tweet_id", models.CharField(max_length=255)),
+                ("screen_name", models.CharField(max_length=512)),
+                ("created_at", models.DateTimeField(blank=True, null=True)),
             ],
             options={
-                'ordering': ['-id'],
+                "ordering": ["-id"],
             },
         ),
         migrations.RemoveField(
-            model_name='location',
-            name='address',
+            model_name="location",
+            name="address",
         ),
         migrations.DeleteModel(
-            name='Address',
+            name="Address",
         ),
         migrations.DeleteModel(
-            name='Location',
+            name="Location",
         ),
         migrations.DeleteModel(
-            name='Tweet',
+            name="Tweet",
         ),
     ]

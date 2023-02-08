@@ -5,24 +5,22 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Entry',
+            name="Entry",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_text', models.TextField()),
-                ('is_resolved', models.BooleanField(default=False)),
-                ('channel', models.CharField(max_length=255)),
-                ('extra_parameters', models.TextField()),
+                ("id", models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name="ID")),
+                ("full_text", models.TextField()),
+                ("is_resolved", models.BooleanField(default=False)),
+                ("channel", models.CharField(max_length=255)),
+                ("extra_parameters", models.TextField()),
             ],
             options={
-                'ordering': ['-id'],
+                "ordering": ["-id"],
             },
         ),
     ]

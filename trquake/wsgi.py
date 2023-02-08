@@ -13,6 +13,6 @@ import os
 # Django Stuff
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trquake.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "trquake.settings")
 
 application = get_wsgi_application()

@@ -47,44 +47,26 @@ block_list = ["blok", "etap", "kisim", "kısım"]
 
 
 df = pd.read_csv(str(DATA_PATH / "il_ilce_v2.csv"))
-city_pattern = re.compile(
-    r"(" + "|".join(df["processed_il"].tolist()) + ")", re.IGNORECASE
-)
-distinct_pattern = re.compile(
-    r"(" + "|".join(df["processed_ilce"].tolist()) + ")", re.IGNORECASE
-)
-neighbourhood_pattern = re.compile(
-    r"(" + "|".join(df["processed_mahalle"].tolist()) + ")", re.IGNORECASE
-)
+city_pattern = re.compile(r"(" + "|".join(df["processed_il"].tolist()) + ")", re.IGNORECASE)
+distinct_pattern = re.compile(r"(" + "|".join(df["processed_ilce"].tolist()) + ")", re.IGNORECASE)
+neighbourhood_pattern = re.compile(r"(" + "|".join(df["processed_mahalle"].tolist()) + ")", re.IGNORECASE)
 neighbourhood_pattern_v2 = re.compile(
     r"((\d+\.)|([A-Za-zÖŞĞÇİÜı0-9]+))\s+\b(" + "|".join(neighbourhood_list) + r")\b",
     re.IGNORECASE,
 )
-street_road_boulevard_pattern = re.compile(
-    r"(((\d+\.)|(\w+))\s+(" + "|".join(street_list) + "))", re.IGNORECASE
-)
-site_apartment_pattern = re.compile(
-    r"(((\d+\.)|(\w+))\s+(" + "|".join(site_list) + "))", re.IGNORECASE
-)
-block_pattern = re.compile(
-    r"(((\d+\.)|(\w+))\s+(" + "|".join(block_list) + "))", re.IGNORECASE
-)
-floor_pattern = re.compile(
-    r"((\d+\.?(\s+)?(kat))|(kat(\s+)?\d+)|(kat:(\s+)?\d+))", re.IGNORECASE
-)
+street_road_boulevard_pattern = re.compile(r"(((\d+\.)|(\w+))\s+(" + "|".join(street_list) + "))", re.IGNORECASE)
+site_apartment_pattern = re.compile(r"(((\d+\.)|(\w+))\s+(" + "|".join(site_list) + "))", re.IGNORECASE)
+block_pattern = re.compile(r"(((\d+\.)|(\w+))\s+(" + "|".join(block_list) + "))", re.IGNORECASE)
+floor_pattern = re.compile(r"((\d+\.?(\s+)?(kat))|(kat(\s+)?\d+)|(kat:(\s+)?\d+))", re.IGNORECASE)
 apartment_no_pattern = re.compile(
     r"((no(\s+)?\d+)|(daire no(\s+?)\d+)|(daire(\s+?)\d+)|([Dd]\s?([0-9]+)))",
     re.IGNORECASE,
 )
-phone_number_pattern = re.compile(
-    r"[+]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+", re.IGNORECASE
-)
+phone_number_pattern = re.compile(r"[+]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+[\s]?[0-9]+", re.IGNORECASE)
 city_dict = dict(zip(df["processed_il"].tolist(), df["il"].tolist()))
 distinct_dict = dict(zip(df["processed_ilce"].tolist(), df["ilçe"].tolist()))
 neighbourhood_dict = dict(zip(df["processed_mahalle"].tolist(), df["mahalle"].tolist()))
-remove_punct_pattern = re.compile(
-    r"[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+\s*", re.IGNORECASE
-)
+remove_punct_pattern = re.compile(r"[!#$%&'()*+,-./:;<=>?@[\]^_`{|}~]+\s*", re.IGNORECASE)
 number_regex = re.compile(r"\d{1,}", re.IGNORECASE)
 
 
@@ -123,11 +105,7 @@ class ExtractInfo:
 
     @staticmethod
     def number_exact_match(text1, text2):
-        return (
-            True
-            if set(number_regex.findall(text1)) == set(number_regex.findall(text2))
-            else False
-        )
+        return True if set(number_regex.findall(text1)) == set(number_regex.findall(text2)) else False
 
     def get_sim_based_city_distinct_neighbourhood(self):
         for token in self.text.split():
@@ -136,40 +114,21 @@ class ExtractInfo:
             for city in city_dict.values():
                 city_lower = city.translate(str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")).lower()
 
-                if (
-                    textdistance.levenshtein.normalized_similarity(
-                        token_lower, city_lower
-                    )
-                    >= 0.9
-                ):
+                if textdistance.levenshtein.normalized_similarity(token_lower, city_lower) >= 0.9:
                     self.result["city"] = city
                     break
 
             for distinct in distinct_dict.values():
-                distinct_lower = distinct.translate(
-                    str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")
-                ).lower()
+                distinct_lower = distinct.translate(str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")).lower()
 
-                if (
-                    textdistance.levenshtein.normalized_similarity(
-                        token_lower, distinct_lower
-                    )
-                    >= 0.9
-                ):
+                if textdistance.levenshtein.normalized_similarity(token_lower, distinct_lower) >= 0.9:
                     self.result["distinct"] = distinct
                     break
 
             for neighbourhood in neighbourhood_dict.values():
-                neighbourhood_lower = neighbourhood.translate(
-                    str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")
-                ).lower()
+                neighbourhood_lower = neighbourhood.translate(str.maketrans("ĞIİÖÜŞÇ", "ğıiöüşç")).lower()
 
-                if (
-                    textdistance.levenshtein.normalized_similarity(
-                        token_lower, neighbourhood_lower
-                    )
-                    >= 0.9
-                ):
+                if textdistance.levenshtein.normalized_similarity(token_lower, neighbourhood_lower) >= 0.9:
                     self.result["neighbourhood"] = neighbourhood
                     break
 
@@ -228,9 +187,7 @@ class ExtractInfo:
 
         # extract mahalle
         try:
-            self.result["neighbourhood"] = neighbourhood_pattern_v2.findall(self.text)[
-                0
-            ][0].strip()
+            self.result["neighbourhood"] = neighbourhood_pattern_v2.findall(self.text)[0][0].strip()
             # extended_mahalle = self.get_until_stopword(self.result["originalText"], self.result["mahalle"])
             # self.result["mahalle"] = extended_mahalle
             self.text = self.text.replace(self.result["neighbourhood"], "")
@@ -247,9 +204,7 @@ class ExtractInfo:
 
         # extract street / road
         try:
-            self.result["street_road"] = street_road_boulevard_pattern.findall(
-                self.text
-            )[0][1].strip()
+            self.result["street_road"] = street_road_boulevard_pattern.findall(self.text)[0][1].strip()
             self.text = self.text.replace(self.result["street_road"], "")
         except Exception as e:
             print(str(e))
@@ -258,9 +213,7 @@ class ExtractInfo:
         # extract site / apartment / bina
 
         try:
-            self.result["apartment"] = site_apartment_pattern.findall(self.text)[0][
-                1
-            ].strip()
+            self.result["apartment"] = site_apartment_pattern.findall(self.text)[0][1].strip()
             # extended_site = self.get_until_stopword(self.result["originalText"], self.result["site_apartman_bina"])
             # self.result["site_apartment_bina"] = extended_site
             self.text = self.text.replace(self.result["apartment"], "")
@@ -289,17 +242,10 @@ class ExtractInfo:
 
         # extract apartment no
         try:
-            self.result["apartment_no"] = apartment_no_pattern.findall(self.text)[0][
-                0
-            ].strip()
+            self.result["apartment_no"] = apartment_no_pattern.findall(self.text)[0][0].strip()
             self.text = self.text.replace(self.result["apartment_no"], "")
             self.result["apartment_no"] = int(
-                self.result["apartment_no"]
-                .lower()
-                .replace("no", "")
-                .replace("daire", "")
-                .replace("d ", "")
-                .strip()
+                self.result["apartment_no"].lower().replace("no", "").replace("daire", "").replace("d ", "").strip()
             )
         except Exception as e:
             print(str(e))
@@ -319,11 +265,7 @@ class ExtractInfo:
                 )
                 if 9 <= len(phone_number) <= 18
             ][0]
-            self.result["excessData"]["phone"] = (
-                phone_number
-                if 9 <= len(phone_number) <= 18
-                else ""
-            )
+            self.result["excessData"]["phone"] = phone_number if 9 <= len(phone_number) <= 18 else ""
             self.text = self.text.replace(self.result["excessData"]["phone"], "")
 
         except Exception as e:

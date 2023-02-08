@@ -5,15 +5,14 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tweets', '0004_address_city_address_distinct_address_name_surname_and_more'),
+        ("tweets", "0004_address_city_address_distinct_address_name_surname_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='address',
-            name='tel',
+            model_name="address",
+            name="tel",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
     ]

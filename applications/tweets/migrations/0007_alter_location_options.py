@@ -5,14 +5,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tweets', '0006_address_is_resolved_location'),
+        ("tweets", "0006_address_is_resolved_location"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='location',
-            options={'ordering': ['-id']},
+            name="location",
+            options={"ordering": ["-id"]},
         ),
     ]
