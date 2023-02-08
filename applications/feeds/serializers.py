@@ -19,7 +19,13 @@ class EntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Entry
-        fields = ["id", "full_text", "channel", "is_resolved", "extra_parameters"]
+        fields = ["id", "full_text", "timestamp", "channel", "is_resolved", "extra_parameters"]
+
+
+class AreaDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = ["id", "loc"]
 
 
 class LocationSerializer(serializers.ModelSerializer):
