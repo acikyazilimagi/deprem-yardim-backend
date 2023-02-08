@@ -9,7 +9,7 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from core.pagination import LocationPagination
 
 from feeds.models import Entry, Location
-from feeds.serializers import EntrySerializer, LocationSerializer
+from feeds.serializers import EntrySerializer, LocationSerializer, AreaDataSerializer
 from feeds.tasks import write_bulk_entries
 from rest_framework import status
 from django.db.models import Count, Q
@@ -19,7 +19,11 @@ from functools import reduce
 
 
 class EntryViewSet(ModelViewSet):
-    authentication_classes = [AfetHaritaAuthentication, BasicAuthentication, SessionAuthentication]
+    authentication_classes = [
+        AfetHaritaAuthentication,
+        BasicAuthentication,
+        SessionAuthentication,
+    ]
     permission_classes = [IsAuthenticated]
     queryset = Entry.objects.all()
     serializer_class = EntrySerializer
@@ -29,7 +33,11 @@ class EntryViewSet(ModelViewSet):
 class BulkEntryView(APIView):
     write_task = write_bulk_entries
     permission_classes = [IsAuthenticated]
-    authentication_classes = [AfetHaritaAuthentication, BasicAuthentication, SessionAuthentication]
+    authentication_classes = [
+        AfetHaritaAuthentication,
+        BasicAuthentication,
+        SessionAuthentication,
+    ]
 
     def post(self, request: Request) -> Response:
         self.write_task.apply_async(kwargs={"entries": request.data})
@@ -44,7 +52,7 @@ class LocationViewSet(ModelViewSet):
 
 
 class AreaViewSet(GenericViewSet):
-    serializer_class = LocationSerializer
+    serializer_class = AreaDataSerializer
     queryset = Location.objects.select_related("entry").all()
 
     def get_queryset(self):
@@ -135,4 +143,3 @@ class CityByCityCountView(APIView):
             )
 
         return Response(data=Location.objects.aggregate(**kwargs))
-
