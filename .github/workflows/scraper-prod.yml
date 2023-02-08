@@ -3,7 +3,7 @@ name: Deploy Scraper Prod
 on:
  push:
     branches:
-      - prod
+      - worker-prod
 
 jobs:
   deploy:
