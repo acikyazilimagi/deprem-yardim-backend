@@ -1,4 +1,5 @@
 # Standard Library
+import json
 from typing import Dict, List, Union
 
 # Rest Framework
@@ -7,6 +8,19 @@ from rest_framework.exceptions import ValidationError
 
 # Applications
 from feeds.models import Entry, Location
+
+
+class JSONSerializerField(serializers.Field):
+
+    def to_representation(self, obj):
+        try:
+            return json.loads(obj)
+        except (ValueError, Exception) as e:
+            # log exception
+            return obj
+
+    def to_internal_value(self, data):
+        return data
 
 
 class BaseEntrySerializer(serializers.ModelSerializer):
@@ -30,6 +44,8 @@ class BulkEntrySerializer(BaseEntrySerializer):
 
 
 class EntrySerializer(BaseEntrySerializer):
+    extra_parameters = JSONSerializerField()
+
     def create(self, validated_data: Dict[str, Union[str, bool]]):
         # Applications
         from feeds.tasks import process_entry
