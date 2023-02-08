@@ -69,8 +69,9 @@ python
 To run the project in development mode:
 
 ```sh
-django-admin createsuperuser
 django-admin migrate
+django-admin createsuperuser
+django-admin collectstatic --no-input
 django-admin runserver
 ```
 
