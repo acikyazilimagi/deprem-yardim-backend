@@ -1,6 +1,7 @@
-from core.views import HealthCheckView
+# Django Stuff
 from django.urls import path
 
-urlpatterns = [
-    path("health/", HealthCheckView.as_view())
-]
+# Applications
+from core.views import HealthCheckView
+
+urlpatterns = [path("health/", HealthCheckView.as_view())]

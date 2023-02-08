@@ -1,8 +1,13 @@
-from trquake.celery import app
-from typing import List, Dict, Union
+# Standard Library
+from typing import Dict, List, Union
+
+# Applications
 from core.address_api import AddressAPI
 from feeds.models import Entry, Location
 from feeds.serializers import BulkEntrySerializer
+
+# Backend
+from trquake.celery import app
 
 
 @app.task

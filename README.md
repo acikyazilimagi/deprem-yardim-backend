@@ -1,4 +1,5 @@
 # Afet Harita Backend
+[ENGLISH VERSION](README.en.md)
 
 https://afetharita.com için back-end projesi. https://api.afetharita.com adresinden erişilebilir.
 
@@ -53,8 +54,8 @@ POSTGRES_DB=debug
 POSTGRES_HOST=trquake-database
 POSTGRES_PORT=5432
 CELERY_BROKER_URL=trquake-redis
-ZEKAI_USERNAME= # zekai.io kullanıcı adı
-ZEKAI_PASSWORD= # zekai.io şifre
+ZEKAI_USERNAME= # zekai.co kullanıcı adı
+ZEKAI_PASSWORD= # zekai.co şifre
 DEFAULT_ADMIN_PASSWORD= # ilk oluşturulan admin kullanıcısı için şifre
 ```
 
@@ -69,8 +70,9 @@ python
 Projeyi development modunda açmak için:
 
 ```sh
-django-admin createsuperuser
 django-admin migrate
+django-admin createsuperuser
+django-admin collectstatic --no-input
 django-admin runserver
 ```
 
