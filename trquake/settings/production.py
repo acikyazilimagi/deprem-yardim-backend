@@ -7,11 +7,13 @@ from .base import *
 env = environ.Env()
 
 DEBUG = False
+AWS_LB_HOST = env("AWS_LB_HOST")
 ALLOWED_HOSTS = [
     "api.afetharita.com",
+    "apinew.afetharita.com",
     "afetharita.com",
-    "backend-alb-708465138.eu-central-1.elb.amazonaws.com",
     "d-back-lb-1711558828.eu-central-1.elb.amazonaws.com",
+    AWS_LB_HOST,
 ]
 # CORS_ALLOWED_ORIGINS = ["https://afetharita.com", "https://api.afetharita.com", "http://api.afetharita.com"]
 CORS_ORIGIN_ALLOW_ALL = True
