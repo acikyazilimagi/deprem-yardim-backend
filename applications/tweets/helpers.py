@@ -13,7 +13,8 @@ logger = logging.getLogger(__name__)
 
 def create_address(processed_address=None,full_address=None,tweet=None):
     city = processed_address.get("city")
-    allowed_cities = ["Gaziantep", "Malatya", "Batman", "Bingöl", "Elazığ", "Kilis", "Diyarbakır", "Mardin", "Siirt", "Şırnak", "Van", "Muş", "Bitlis", "Hakkari", "Adana", "Osmaniye","Hatay"]
+(?i)((gaz[ıiİI]antep)|(malatya)|(batman)|(b[ıiIİ]ng[oöOÖ]l)|(elaz[Iİıi][gğ])|(kilis)|(diyarbak[ıiIİ]r)|(mardin)|(siirt)|([SsŞş][ıiIİ]rnak)|(van)|(mu[sşSŞ])|(bitlis)|(hakkari)|(adana)|(osmaniye)|(hatay)|(kahramanmara[sşSŞ])|(mara[SŞsş])|(antep))
+
 
     if city in allowed_cities or city == None:
         return Address.objects.create(
