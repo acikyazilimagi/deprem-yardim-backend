@@ -2,7 +2,8 @@
 
 # migrations
 
-python manage.py migrate
+# python manage.py migrate
+python manage.py migrate --database=write_db
 python manage.py collectstatic --no-input
 python manage.py create_default_user
 
