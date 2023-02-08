@@ -19,9 +19,3 @@ class AddressAPI:
 
     def regex_api_request(self, address_text: str):
         return self.regex_api.extract(address_text)
-
-if __name__ == "__main__":
-    address_api = AddressAPI()
-    address_input = "Necip Fazıl"
-    response = address_api.regex_api_request(address_input)
-    print(response)
