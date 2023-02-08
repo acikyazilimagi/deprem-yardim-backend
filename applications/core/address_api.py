@@ -1,7 +1,7 @@
 # Applications
 from core.helpers.trendyol_bff import TY_BFF
 from core.helpers.regex_api import ExtractInfo
-
+from core.helpers.address_evaluator import AddressEvaluator
 
 class AddressAPI:
     def __init__(self):
@@ -10,8 +10,18 @@ class AddressAPI:
 
         self.regex_api = ExtractInfo()
 
+        self.address_evaluator = AddressEvaluator()
+
     def trendyol_bff_api_request(self, address_text: str):
-        return self.ty_api.request(address_text)
+        addresses = self.ty_api.request(address_text)
+        busiest_address = self.address_evaluator.get_busiest_address(addresses)
+        return busiest_address
 
     def regex_api_request(self, address_text: str):
         return self.regex_api.extract(address_text)
+
+if __name__ == "__main__":
+    address_api = AddressAPI()
+    address_input = "Necip Fazıl"
+    response = address_api.regex_api_request(address_input)
+    print(response)
