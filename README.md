@@ -5,6 +5,9 @@ https://afetharita.com için back-end projesi. https://api.afetharita.com adresi
 
 Diğer projeler: https://github.com/acikkaynak/deprem-yardim-projesi
 
+## Mimari
+![image](docs/afetharita-backend.png)
+
 ## Kullanılan teknolojiler
 
 Python (Django), Postgres (PostgreSQL), Redis, AWS (Elastic Load Balancer, ECS, AWS Fargate), OpenAI (Görsellerin metine çevirilmesi)
@@ -24,7 +27,7 @@ Python (Django), Postgres (PostgreSQL), Redis, AWS (Elastic Load Balancer, ECS, 
 Docker yükledikten sonra tüm projeyi docker-compose ile çalıştırmak için
 
 ```sh
-docker-compose up -d
+docker-compose up --build -d
 ```
 
 Geliştirme için sadece postgres ve redisi ayağa kaldırmak için:
