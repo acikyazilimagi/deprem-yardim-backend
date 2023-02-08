@@ -52,7 +52,7 @@ def collect_deprem_address_tweets():
             - datetime.timedelta(minutes=7)
         ).timestamp()
     )
-    query = f""""#depremadres" lang:tr since_time:{since_time}"""
+    query = f""""#depremadres" since_time:{since_time}"""
     for tweet in fetch_tweets(query=query):
         data.append(
             DepremAddress(
@@ -60,6 +60,7 @@ def collect_deprem_address_tweets():
                 tweet_id=tweet["tweet_id"],
                 screen_name=tweet["screen_name"],
                 created_at=tweet["created_at"],
+                geo_link=tweet["links"],
             )
         )
 
