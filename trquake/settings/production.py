@@ -7,7 +7,7 @@ from .base import *
 env = environ.Env()
 
 DEBUG = False
-ALLOWED_HOSTS = ["api.afetharita.com", "afetharita.com"]
+ALLOWED_HOSTS = ["api.afetharita.com", "afetharita.com", "backend-alb-708465138.eu-central-1.elb.amazonaws.com"]
 # CORS_ALLOWED_ORIGINS = ["https://afetharita.com", "https://api.afetharita.com", "http://api.afetharita.com"]
 CORS_ORIGIN_ALLOW_ALL = True
 
@@ -21,5 +21,6 @@ DATABASES = {
         "PASSWORD": env("POSTGRES_PASSWORD"),
         "HOST": env("POSTGRES_HOST"),
         "PORT": "5432",
+        "ATOMIC_REQUESTS": True,
     }
 }
