@@ -1,8 +1,8 @@
 # Standard Library
 from typing import Dict, List, Union
+import requests, os, json
 
 # Applications
-import requests, os, json
 from core.address_api import AddressAPI
 from feeds.models import Entry, Location
 from feeds.serializers import BulkEntrySerializer
@@ -59,7 +59,7 @@ def get_all_depremyardim():
             params= {
                 "X-AUTH-KEY": os.environ['DEPREM_YARDIM_AUTH_KEY'],
                 "page": i,
-                "per_page": "1000"
+                "per_page": "10000"
             }
         )
         new_data = json.loads(req.text)
@@ -72,25 +72,14 @@ def get_all_depremyardim():
 
     # 3. Geri kalan datalar icin yeni entryler olustur
     for row in data:
+        full_address = f"{row['street']} {row['address']} {row['district']} {row['city']}"
         new_entry = Entry(
-            full_text = json.dumps(row),
-            is_resolved = False,
+            full_text = full_address,
+            is_resolved = True,
             channel = "depremyardim",
             extra_parameters = json.dumps(row)
         )
         new_entry.save()
-        # TODO: Bu islem nasil calisiyor tam olarak
-        new_location = AddressAPI.regex_api_request() #???
-        if new_location.get("is_resolved", False):
-            new_entry.is_resolved = True
-            new_entry.save()
-            Location.objects.create(
-                entry=new_entry,
-                latitude=new_location["latitude"],
-                longitude=new_location["longitude"],
-                northeast_lat=new_location["northeast_lat"],
-                northeast_lng=new_location["northeast_lng"],
-                southwest_lat=new_location["southwest_lat"],
-                southwest_lng=new_location["southwest_lng"],
-                formatted_address=new_location["formatted_address"],
-            )
+        process_entry(entry_id=new_entry.id)
+    
+get_all_depremyardim()
