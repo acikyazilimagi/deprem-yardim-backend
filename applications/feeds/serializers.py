@@ -1,6 +1,11 @@
-from rest_framework import serializers
-from feeds.models import Entry, Location
+# Standard Library
 from typing import Dict, Union
+
+# Rest Framework
+from rest_framework import serializers
+
+# Applications
+from feeds.models import Entry, Location
 
 
 class BulkEntrySerializer(serializers.ModelSerializer):
@@ -11,6 +16,7 @@ class BulkEntrySerializer(serializers.ModelSerializer):
 
 class EntrySerializer(serializers.ModelSerializer):
     def create(self, validated_data: Dict[str, Union[str, bool]]):
+        # Applications
         from feeds.tasks import process_entry
 
         instance: Entry = super().create(validated_data=validated_data)

@@ -1,9 +1,12 @@
-from feeds.models import Location
-from rest_framework.viewsets import GenericViewSet
-from rest_framework.exceptions import ValidationError
+# Rest Framework
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
+from rest_framework.viewsets import GenericViewSet
+from rest_framework.exceptions import ValidationError
+
+# Applications
+from feeds.models import Location
 
 
 class BaseAreaViewSet(GenericViewSet):

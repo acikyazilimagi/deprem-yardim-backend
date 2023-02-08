@@ -1,3 +1,4 @@
+# Applications
 from core.helpers.trendyol_bff import TY_BFF
 from core.helpers.regex_api import ExtractInfo
 

@@ -1,11 +1,16 @@
-from trquake.celery import app
-import datetime
-from tweets.models import DepremAddress
-from feeds.models import Entry
-from typing import List
+# Standard Library
 import json
+import datetime
+from typing import List
+
+# Applications
+from feeds.models import Entry
 from feeds.tasks import process_entry
 from tweets.helpers import fetch_tweets
+from tweets.models import DepremAddress
+
+# Backend
+from trquake.celery import app
 
 
 @app.task

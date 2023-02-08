@@ -1,9 +1,14 @@
+# Standard Library
+import re
+import copy
+from typing import Dict, Union, Optional
+
+# Third Party
 import unidecode
 import pandas as pd
-import copy
-import re
+
+# Django Stuff
 from django.conf import settings
-from typing import Dict, Union, Optional
 
 DATA_PATH = settings.APPLICATIONS_DIR / "core" / "helpers" / "data"
 

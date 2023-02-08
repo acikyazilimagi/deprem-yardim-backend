@@ -1,8 +1,11 @@
+# Rest Framework
 from rest_framework.viewsets import ModelViewSet
-from feeds.serializers import LocationSerializer
-from core.pagination import LocationPagination
+
+# Applications
 from feeds.models import Location
+from core.pagination import LocationPagination
 from feeds.filters import LocationFilterBackend
+from feeds.serializers import LocationSerializer
 
 
 class LocationViewSet(ModelViewSet):

@@ -1,5 +1,8 @@
-from django.http import HttpResponse
+# Standard Library
 import json
+
+# Django Stuff
+from django.http import HttpResponse
 
 
 class HealthCheckMiddleware:

@@ -1,4 +1,7 @@
+# Rest Framework
 from rest_framework import filters
+
+# Applications
 from feeds.serializers import LocationFilterParamSerializer
 
 

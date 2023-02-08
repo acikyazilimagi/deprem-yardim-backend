@@ -1,15 +1,16 @@
-from rest_framework.viewsets import ModelViewSet
+# Rest Framework
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from core.authentication import AfetHaritaAuthentication
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication
 
-
+# Applications
 from feeds.models import Entry
-from feeds.serializers import EntrySerializer
 from feeds.tasks import write_bulk_entries
+from feeds.serializers import EntrySerializer
+from core.authentication import AfetHaritaAuthentication
 
 
 class EntryViewSet(ModelViewSet):

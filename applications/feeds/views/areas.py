@@ -1,12 +1,19 @@
-from feeds.views.base import BaseAreaViewSet
-from feeds.serializers import LocationSerializer, LocationLiteSerializer
+# Standard Library
+import operator
+from functools import reduce
+
+# Django Stuff
+from django.db.models import Q, Count
+
+# Rest Framework
+from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.views import APIView
-import operator
-from django.db.models import Count, Q
+
+# Applications
 from feeds.models import Location
-from functools import reduce
+from feeds.views.base import BaseAreaViewSet
+from feeds.serializers import LocationSerializer, LocationLiteSerializer
 
 
 class AreaViewSet(BaseAreaViewSet):

@@ -1,6 +1,9 @@
+# Standard Library
+import itertools
+
+# Third Party
 import pandas as pd
 from pytz import timezone
-import itertools
 import snscrape.modules.twitter as sntwitter
 
 
