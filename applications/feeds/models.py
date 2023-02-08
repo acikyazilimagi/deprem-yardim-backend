@@ -7,6 +7,7 @@ class Entry(models.Model):
         ("telegram", "telegram"),
         ("twitch", "twitch"),
         ("discord", "discord"),
+        ("depremyardim", "depremyardim")
     )
 
     full_text = models.TextField()
