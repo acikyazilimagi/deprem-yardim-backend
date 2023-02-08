@@ -3,7 +3,7 @@ name: Deploy API Prod
 on:
  push:
     branches:
-      - prod
+      - prod-2
 
 jobs:
   deploy:
