@@ -1,3 +1,4 @@
+# Django Stuff
 from django.db import models
 
 
@@ -39,4 +40,3 @@ class Location(models.Model):
             "northeast": {"lat": self.northeast_lat, "lng": self.northeast_lng},
             "southwest": {"lat": self.southwest_lat, "lng": self.southwest_lng},
         }
-
