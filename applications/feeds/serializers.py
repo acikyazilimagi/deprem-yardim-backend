@@ -22,7 +22,7 @@ class EntrySerializer(serializers.ModelSerializer):
         fields = ["id", "full_text", "timestamp", "channel", "is_resolved", "extra_parameters"]
 
 
-class AreaDataSerializer(serializers.ModelSerializer):
+class LocationLiteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ["id", "loc"]
@@ -34,3 +34,13 @@ class LocationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Location
         fields = ["id", "formatted_address", "loc", "viewport", "raw"]
+
+
+class LocationFilterParamSerializer(serializers.Serializer):
+    """
+    Filter by query param: timestamp
+    """
+
+    timestamp__gte = serializers.DateTimeField(required=False)
+    timestamp__lte = serializers.DateTimeField(required=False)
+
