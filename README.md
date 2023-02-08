@@ -1,4 +1,6 @@
 # Afet Harita Backend
+Sadece Write operasyonları için kullanılıyor! Read op için:https://github.com/acikkaynak/deprem-yardim-backend-go
+
 [ENGLISH VERSION](README.en.md)
 
 https://afetharita.com için back-end projesi. https://api.afetharita.com adresinden erişilebilir.
