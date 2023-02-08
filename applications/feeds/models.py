@@ -1,5 +1,6 @@
 # Django Stuff
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class Entry(models.Model):
@@ -8,10 +9,14 @@ class Entry(models.Model):
         ("telegram", "telegram"),
         ("twitch", "twitch"),
         ("discord", "discord"),
+        ("depremyardim", "depremyardim"),
+        ("manual", "manual"),
     )
 
     full_text = models.TextField()
+    location = ArrayField(base_field=models.FloatField(default=0.0), null=True)
     is_resolved = models.BooleanField(default=False)
+    is_geolocated = models.BooleanField(default=False)
     channel = models.CharField(max_length=255, choices=CHANNEL_CHOICES)
     extra_parameters = models.TextField(null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
@@ -21,7 +26,9 @@ class Entry(models.Model):
 
 
 class Location(models.Model):
-    entry = models.ForeignKey("feeds.Entry", on_delete=models.CASCADE)
+    entry = models.ForeignKey(
+        "feeds.Entry", on_delete=models.CASCADE, related_query_name="entry", related_name="entries"
+    )
     formatted_address = models.TextField(null=True, blank=True)
     latitude = models.FloatField(default=0.0)
     longitude = models.FloatField(default=0.0)
@@ -40,3 +47,6 @@ class Location(models.Model):
             "northeast": {"lat": self.northeast_lat, "lng": self.northeast_lng},
             "southwest": {"lat": self.southwest_lat, "lng": self.southwest_lng},
         }
+
+    class Meta:
+        ordering = ["-id"]
