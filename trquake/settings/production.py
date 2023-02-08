@@ -9,6 +9,7 @@ env = environ.Env()
 DEBUG = False
 ALLOWED_HOSTS = [
     "api.afetharita.com",
+    "apinew.afetharita.com",
     "afetharita.com",
     "backend-alb-708465138.eu-central-1.elb.amazonaws.com",
     "d-back-lb-1711558828.eu-central-1.elb.amazonaws.com",
