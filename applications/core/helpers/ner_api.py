@@ -1,15 +1,17 @@
-import os
 import json
 import requests
-class NerApi():
 
-    def __init__(self,url,api_key):
+
+class NerApi:
+
+    def __init__(self, url, api_key):
         self.endpoint = "https://api-inference.huggingface.co/models/deprem-ml/deprem-ner"
         self.api_key = api_key
-        self.header ={"Authorization": f"Bearer {self.api_key}"}
+        self.header = {"Authorization": f"Bearer {self.api_key}"}
 
     """This function works faster with async calls."""
-    def query(self,payload: str):
+
+    def query(self, payload: str):
         data = json.dumps(payload)
         response = requests.request("POST", self.api_key, headers=self.header, data=data)
         response = json.loads(response.content.decode("utf-8"))
