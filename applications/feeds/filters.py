@@ -1,7 +1,7 @@
 from rest_framework import filters
 from rest_framework import serializers
 
-class LocationFilterParamSerializer(serializers.Serializer):
+class TimestampFilterParamSerializer(serializers.Serializer):
     """
     Filter by query param: timestamp
     """
@@ -10,12 +10,12 @@ class LocationFilterParamSerializer(serializers.Serializer):
 
 
 
-class LocationFilterBackend(filters.BaseFilterBackend):
+class TimestampFilterBackend(filters.BaseFilterBackend):
     """
-    Filter that only allows users to see their own objects.
+    Filter for timestamp filter.
     """
     def filter_queryset(self, request, queryset, view):
-        params = LocationFilterParamSerializer(data=request.query_params)
+        params = TimestampFilterParamSerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
         filters=params.validated_data
         timestamp__gte = filters.get("raw__timestamp__gte",None)

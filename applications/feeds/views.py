@@ -9,7 +9,7 @@ from rest_framework.authentication import BasicAuthentication, SessionAuthentica
 from core.pagination import LocationPagination
 
 from feeds.models import Entry, Location
-from feeds.filters import LocationFilterBackend
+from feeds.filters import TimestampFilterBackend
 from feeds.serializers import EntrySerializer, LocationSerializer
 from feeds.tasks import write_bulk_entries
 from rest_framework import status
@@ -43,13 +43,14 @@ class LocationViewSet(ModelViewSet):
     serializer_class = LocationSerializer
     http_method_names = ["options", "head", "get"]
     pagination_class = LocationPagination
-    filter_backends = [LocationFilterBackend]
+    filter_backends = [TimestampFilterBackend]
 
 
 
 class AreaViewSet(GenericViewSet):
     serializer_class = LocationSerializer
     queryset = Location.objects.select_related("entry").all()
+    filter_backends = [TimestampFilterBackend]
 
     def get_queryset(self):
         ne_lat = self.request.query_params.get("ne_lat")
