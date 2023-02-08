@@ -49,3 +49,16 @@ DATABASES = {
         "PORT": "5432",
     },
 }
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": [
+            env("CACHE_REDIS_URL"),  # redis://redis-prod-1.euc1.cache.amazonaws.com:6379
+        ],
+    }
+}
+CACHE_MIDDLEWARE_ALIAS = "default"  # which cache alias to use
+CACHE_MIDDLEWARE_SECONDS = 60 * 7  # number of seconds to cache a page for (TTL)
+# should be used if the cache is shared across multiple sites that use the same Django instance
+CACHE_MIDDLEWARE_KEY_PREFIX = ""

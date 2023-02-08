@@ -4,6 +4,8 @@ from functools import reduce
 
 # Django Stuff
 from django.db.models import Q, Count
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 
 # Rest Framework
 from rest_framework.views import APIView
@@ -25,6 +27,7 @@ class AreaLiteViewSet(BaseAreaViewSet):
 
 
 class AreasCountViewSet(AreaViewSet):
+    @method_decorator(cache_page(60 * 7))
     def list(self, request: Request, *args, **kwargs) -> Response:
         return Response({"count": self.get_queryset().count()})
 
@@ -45,6 +48,7 @@ class CityByCityCountView(APIView):
         "Mersin": ["Mersin", "İçel", "Tarsus", "Icel"],
     }
 
+    @method_decorator(cache_page(60 * 7))
     def get(self, request: Request) -> Response:
         kwargs = {}
         for city, keywords in self.CITY_LIST.items():
