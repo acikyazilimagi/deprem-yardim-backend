@@ -20,6 +20,7 @@ def fetch_tweets(query: str):
         return []
 
     for ind in df.index:
+        links = df["links"][ind][0]["url"] if df["links"][ind] else ""
         user_id = df["user"][ind]["id"]
         screen_name = df["user"][ind]["displayname"]
         name = df["user"][ind]["username"]
@@ -43,4 +44,5 @@ def fetch_tweets(query: str):
             "hashtags": str(hashtags),
             "user_account_created_at": str(user_account_created_at),
             "media": str(media),
+            "links": links,
         }
