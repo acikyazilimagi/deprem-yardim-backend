@@ -1,6 +1,9 @@
-from django.core.management import BaseCommand
-from django.contrib.auth.models import User
+# Third Party
 import environ
+
+# Django Stuff
+from django.contrib.auth.models import User
+from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):

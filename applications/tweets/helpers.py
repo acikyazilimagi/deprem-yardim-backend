@@ -1,21 +1,18 @@
+# Standard Library
+import itertools
+
+# Third Party
 import pandas as pd
 from pytz import timezone
-import itertools
 import snscrape.modules.twitter as sntwitter
 
 
 def fetch_tweets(query: str):
     turkey = timezone("Europe/Istanbul")
 
-    df = pd.DataFrame(
-        itertools.islice(
-            sntwitter.TwitterSearchScraper(f"{query}").get_items(), 9999999
-        )
-    )
+    df = pd.DataFrame(itertools.islice(sntwitter.TwitterSearchScraper(f"{query}").get_items(), 9999999))
     try:
-        df["date"] = df.date.apply(
-            lambda x: pd.to_datetime(str(pd.to_datetime(x).astimezone(turkey))[:-6])
-        )
+        df["date"] = df.date.apply(lambda x: pd.to_datetime(str(pd.to_datetime(x).astimezone(turkey))[:-6]))
     except AttributeError:
         return []
 
