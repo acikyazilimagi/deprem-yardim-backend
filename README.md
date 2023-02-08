@@ -71,6 +71,7 @@ Projeyi development modunda açmak için:
 ```sh
 django-admin migrate
 django-admin createsuperuser
+django-admin collectstatic --no-input
 django-admin runserver
 ```
 
