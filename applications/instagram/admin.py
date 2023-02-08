@@ -1,5 +1,11 @@
 from django.contrib import admin
-from instagram.models import Hashtag, InstagramPost, InstagramSession
+from instagram.models import (
+    Hashtag,
+    InstagramPost,
+    InstagramSession,
+    InstagramPostToFollow,
+    InstagramComment,
+)
 
 
 @admin.register(Hashtag)
@@ -27,3 +33,21 @@ class InstagramPostAdmin(admin.ModelAdmin):
 
     class Meta:
         model = InstagramPost
+
+
+@admin.register(InstagramPostToFollow)
+class InstagramPostToFollowAdmin(admin.ModelAdmin):
+    list_display = ["url", "created_at", "updated_at"]
+    search_fields = ["url"]
+
+    class Meta:
+        model = InstagramPostToFollow
+
+
+@admin.register(InstagramComment)
+class InstagramCommentAdmin(admin.ModelAdmin):
+    list_display = ["comment_id", "screen_name", "followed_post", "created_at"]
+    search_fields = ["comment_id", "screen_name", "followed_post", "created_at"]
+
+    class Meta:
+        model = InstagramComment
