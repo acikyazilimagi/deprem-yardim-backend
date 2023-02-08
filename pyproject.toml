@@ -45,6 +45,8 @@ black = "^23.1.0"
 watchdog = {version = "^2.2.1", extras = ["watchmedo"]}
 pre-commit = "^3.0.4"
 flake8 = "^6.0.0"
+django-debug-toolbar = "^3.8.1"
+django-extensions = "^3.2.1"
 
 [build-system]
 requires = ["poetry-core"]

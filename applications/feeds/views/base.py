@@ -1,3 +1,7 @@
+# Django Stuff
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
 # Rest Framework
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -41,6 +45,7 @@ class BaseAreaViewSet(GenericViewSet):
             southwest_lng__gte=sw_lng,
         )
 
+    @method_decorator(cache_page(60 * 7))
     def list(self, request: Request, *args, **kwargs) -> Response:
         """
         list method retrieves a list of objects in the queryset based on the bounds defined by the
