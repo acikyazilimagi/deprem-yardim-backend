@@ -35,7 +35,7 @@ docker-compose up -d postgres redis
 
 ## Python
 
-Python bağımlılık yönetimi poetry ile sağlanmaktadır.
+Python bağımlılık yönetimi [poetry](https://python-poetry.org/) ile sağlanmaktadır.
 
 ```
 pip install poetry
@@ -44,39 +44,56 @@ poetry install
 
 ile gerekli paketleri yükleyebilirsiniz. Poetry kendi ortamını oluşturup paketleri oraya yükleyecektir.
 
-Daha sonra ortam değişkenlerini ayarlayın. .env.template dosyasını .env adıyla kopyalayıp gerekli ayarları yapın. Compose'dan gelen örnek ayarlarla aşağıdaki gibi olacaktır:
+&nbsp;
 
-```sh
-DJANGO_SECRET_KEY= # django için secret-key
-POSTGRES_PASSWORD=debug
-POSTGRES_USER=debug
-POSTGRES_DB=debug
-POSTGRES_HOST=trquake-database
-POSTGRES_PORT=5432
-CELERY_BROKER_URL=trquake-redis
-ZEKAI_USERNAME= # zekai.co kullanıcı adı
-ZEKAI_PASSWORD= # zekai.co şifre
-DEFAULT_ADMIN_PASSWORD= # ilk oluşturulan admin kullanıcısı için şifre
-```
-
-Django Secret key oluşturmak için:
-
+**Django Secret ile key oluşturmak için:**
 ```sh
 python
 >>> from django.core.management.utils import get_random_secret_key
 >>> print(get_random_secret_key())
 ```
 
-Projeyi development modunda açmak için:
+Daha sonra ortam değişkenlerini ayarlayın. **.env.template** dosyasını **.env** adıyla kopyalayıp gerekli ayarları yapın.
 
+&nbsp;
+
+Compose'dan gelen örnek ayarlarla aşağıdaki gibi olacaktır:
 ```sh
-django-admin migrate
-django-admin createsuperuser
-django-admin collectstatic --no-input
-django-admin runserver
+DJANGO_SECRET_KEY= # oluşturduğumuz secret key
+POSTGRES_PASSWORD=debug
+POSTGRES_USER=debug
+POSTGRES_DB=debug
+POSTGRES_HOST=trquake-database
+POSTGRES_PORT=5432
+CELERY_BROKER_URL=redis://trquake-redis:6379
+ZEKAI_USERNAME= # zekai.co kullanıcı adı
+ZEKAI_PASSWORD= # zekai.co şifre
+DEFAULT_ADMIN_PASSWORD= # ilk oluşturulan admin kullanıcısı için şifre
 ```
 
-Celery için geliştirilen taskları çalıştırmak için:
+&nbsp;
+
+**Projeyi development modunda çalıştırmak için:**
+
+```sh
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin migrate
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin createsuperuser
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin collectstatic --no-input
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin runserver
+```
+Yukarıdaki komutlar sonucunda çalışan yerel uygulamamızın bilgileri şöyle olacaktır;
+
+Ana Url: http://127.0.0.1:8000/
+
+Admin Url: http://127.0.0.1:8000/admin/
+
+Admin Kullanıcı Adı: ```depremyardim```
+
+Admin Kullanıcı Şifresi: **.env** dosyasında ```DEFAULT_ADMIN_PASSWORD``` kısmında tanımladığınız şifre.
+
+&nbsp;
+
+**Celery tasklarını çalıştırmak için:**
 
 ```sh
 celery -A trquake.celery.app worker -B -l DEBUG

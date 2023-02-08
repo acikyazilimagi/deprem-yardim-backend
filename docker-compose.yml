@@ -33,6 +33,7 @@ services:
       - POSTGRES_PASSWORD=debug
       - POSTGRES_USER=debug
       - POSTGRES_DB=debug
+      - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
       - trquake_postgres:/var/lib/postgresql/data
 
@@ -50,7 +51,7 @@ services:
       - POSTGRES_PORT=5432
 
   queue:
-    container_name: trquake-queue
+    container_name: trquake-redis
     image: redis:alpine
     ports:
       - "6379:6379"
