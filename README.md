@@ -1,4 +1,5 @@
 # Afet Harita Backend
+[ENGLISH VERSION](README.en.md)
 
 https://afetharita.com için back-end projesi. https://api.afetharita.com adresinden erişilebilir.
 
