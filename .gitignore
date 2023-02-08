@@ -16,5 +16,4 @@ celerybeat-schedule
 statics/root/*
 !statics/root/.gitkeep
 
-
-
+venv/
