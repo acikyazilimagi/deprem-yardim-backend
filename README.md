@@ -33,6 +33,18 @@ Geliştirme için sadece postgres ve redisi ayağa kaldırmak için:
 docker-compose up -d postgres redis
 ```
 
+### Arm64 işlemciler için...
+
+Docker ile geliştirme ortamı kurulurken, arm64 tabanlı işlemcilerde (Örneğin Macbook M1) `psycopg2` yanlış `libpg` versiyonu seçmekte. 
+Eğer arm64 tabanlı işlemci kullanıyorsanız yukarıdaki komutlar öncesinde aşağıdaki adımları uygulamalısınız:
+
+```shell
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+docker-compose build
+```
+
+Bu adımı her bağımlılık/docker konfigürasyon değişiminde tekrarlamalısınız.
+
 ## Python
 
 Python bağımlılık yönetimi poetry ile sağlanmaktadır.

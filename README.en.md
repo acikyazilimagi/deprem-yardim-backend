@@ -32,6 +32,20 @@ To run only postgres and redis for development:
 docker-compose up -d postgres redis
 ```
 
+### For arm64 processors...
+
+When setting up development environment with docker on arm64 processors (Mac M1 i.e.) `psycopg2` might select wrong upstream version of `libpg`.
+
+If you use a computer with `arm64` processor, please follow steps below:
+
+```shell
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+docker-compose build
+```
+
+You need to re-apply steps whenever docker configuration or dependencies change.
+
+
 ## Python
 
 Python dependency management is provided with poetry.
