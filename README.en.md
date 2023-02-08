@@ -34,7 +34,7 @@ docker-compose up -d postgres redis
 
 ## Python
 
-Python dependency management is provided with poetry.
+Python dependency management is provided with [poetry](https://python-poetry.org/).
 
 ```
 pip install poetry
@@ -43,22 +43,9 @@ poetry install
 
 to install the required packages. Poetry will create its own environment and install packages there.
 
-Then set the environment variables. Copy the .env.template file to .env and make the necessary settings. With example settings from Compose, it will look like this:
+&nbsp;
 
-```sh
-DJANGO_SECRET_KEY= # secret-key for django
-POSTGRES_PASSWORD=debug
-POSTGRES_USER=debug
-POSTGRES_DB=debug
-POSTGRES_HOST=trquake-database
-POSTGRES_PORT=5432
-CELERY_BROKER_URL=trquake-redis
-ZEKAI_USERNAME= # zekai.io username
-ZEKAI_PASSWORD= # zekai.io password
-DEFAULT_ADMIN_PASSWORD= # password for the first created admin user
-```
-
-To create the Django secret key:
+**To create the Django secret key:**
 
 ```sh
 python
@@ -66,15 +53,47 @@ python
 >>> print(get_random_secret_key())
 ```
 
-To run the project in development mode:
+&nbsp;
+
+Then set the environment variables. Copy the **.env.template** file to **.env** and make the necessary settings. With example settings from Compose, it will look like this:
 
 ```sh
-django-admin createsuperuser
-django-admin migrate
-django-admin runserver
+DJANGO_SECRET_KEY= # created secret key
+POSTGRES_PASSWORD=debug
+POSTGRES_USER=debug
+POSTGRES_DB=debug
+POSTGRES_HOST=trquake-database
+POSTGRES_PORT=5432
+CELERY_BROKER_URL=redis://trquake-redis:6379
+ZEKAI_USERNAME= # zekai.io username
+ZEKAI_PASSWORD= # zekai.io password
+DEFAULT_ADMIN_PASSWORD= # password for the first created admin user
 ```
 
-To run the Celery tasks developed for the project:
+&nbsp;
+
+**To run the project in development mode:**
+
+```sh
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin migrate
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin createsuperuser
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin collectstatic --no-input
+DJANGO_SETTINGS_MODULE=trquake.settings.development django-admin runserver
+```
+
+The information of your local application running as a result of the above commands will be as follows:
+
+Base Url: http://127.0.0.1:8000/
+
+Admin Url: http://127.0.0.1:8000/admin/
+
+Admin User: ```depremyardim```
+
+Admin Pass: The password you defined in ```DEFAULT_ADMIN_PASSWORD``` in the **.env** file.
+
+&nbsp;
+
+**To run the Celery tasks developed for the project:**
 
 ```sh
 celery -A trquake.celery.app worker -B -l DEBUG

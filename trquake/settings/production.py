@@ -6,6 +6,8 @@ from .base import *
 
 env = environ.Env()
 
+CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://trquake-queue:6379")
+
 DEBUG = False
 AWS_LB_HOST = env("AWS_LB_HOST")
 ALLOWED_HOSTS = [
