@@ -1,4 +1,7 @@
+# Django Stuff
 from django.contrib import admin
+
+# Applications
 from feeds.models import Entry, Location
 
 
