@@ -6,6 +6,7 @@ from .base import *
 
 env = environ.Env()
 
+CONN_MAX_AGE=600
 
 DATABASES = {
     "default": {

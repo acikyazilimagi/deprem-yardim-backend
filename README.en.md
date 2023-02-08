@@ -91,5 +91,5 @@ django-admin runserver
 To run the Celery tasks developed for the project:
 
 ```sh
-celery -A trquake.celery.app worker -B -l DEBUG
+celery -A trquake.celery_service.app worker -B -l DEBUG
 ```
