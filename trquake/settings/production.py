@@ -18,6 +18,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CSRF_TRUSTED_ORIGINS = ["https://*.afetharita.com", "http://*.afetharita.com", "https://afetharita.com"]
 
+DATABASE_ROUTERS = ["core.db_routers.PrimaryReplicaRouter"]
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -27,5 +29,21 @@ DATABASES = {
         "HOST": env("POSTGRES_HOST"),
         "PORT": "5432",
         "ATOMIC_REQUESTS": True,
-    }
+    },
+    "read_db": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("REPLICA_DB_NAME"),
+        "USER": env("REPLICA_DB_USER"),
+        "PASSWORD": env("REPLICA_DB_PASSWORD"),
+        "HOST": env("REPLICA_DB_READ_HOST"),
+        "PORT": "5432",
+    },
+    "write_db": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("REPLICA_DB_NAME"),
+        "USER": env("REPLICA_DB_USER"),
+        "PASSWORD": env("REPLICA_DB_PASSWORD"),
+        "HOST": env("REPLICA_DB_WRITE_HOST"),
+        "PORT": "5432",
+    },
 }
