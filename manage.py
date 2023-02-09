@@ -7,7 +7,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "trquake.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "trquake.settings.development")
     try:
         # Django Stuff
         from django.core.management import execute_from_command_line
