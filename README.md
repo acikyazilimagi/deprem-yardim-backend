@@ -33,7 +33,7 @@ docker-compose up --build -d
 Geliştirme için sadece postgres ve redisi ayağa kaldırmak için:
 
 ```sh
-docker-compose up -d postgres redis
+docker-compose up -d database queue
 ```
 
 ## Python
