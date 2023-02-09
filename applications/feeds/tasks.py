@@ -18,12 +18,19 @@ def process_entry(entry_id: int):
     if not entry.is_resolved and not entry.is_geolocated:
         regex_response = address_api.regex_api_request(entry.full_text)
         if regex_response["ws"] < 0.71:
-            # ask to openai
+            # Şuanlık ner ile ilgili problemler var. O yüzden canlıya çıkmıyoruz.
+            """
+            ner_response = address_api.ner_api_request(entry.full_text)
+            if ner_response["ws"] < 0.71:
+                # ask to openai
+                return
+            address_text = ner_response["address"]
+            """
             return
         address_text = regex_response["address"]
 
     if not entry.is_geolocated:
-        geolocation = address_api.trendyol_bff_api_request(address_text)
+        geolocation = address_api.google_geocode_api_request(address_text)
         if geolocation.get("is_resolved", False):
             entry.is_resolved = True
             entry.save()
