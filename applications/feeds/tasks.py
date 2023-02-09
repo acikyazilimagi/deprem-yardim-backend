@@ -1,5 +1,6 @@
 # Standard Library
 from typing import Dict, List, Union
+import requests, os, json
 
 # Applications
 from core.address_api import AddressAPI
@@ -48,3 +49,40 @@ def write_bulk_entries(entries: List[Dict[str, Union[str, bool]]]):
         if serializer.is_valid():
             entry: Entry = serializer.save()
             process_entry(entry_id=entry.id)
+
+
+@app.task
+def get_all_depremyardim():
+
+    # 1. Tum datayi depremyardimdan get TODO: Multithread?
+    data, new_data, i = [], {}, 1
+    while len(new_data.get("data", [""])) > 0:
+        req = requests.get(
+            url = "https://depremyardim.com/api/list",
+            params= {
+                "X-AUTH-KEY": os.environ['DEPREM_YARDIM_AUTH_KEY'],
+                "page": i,
+                "per_page": "10000"
+            }
+        )
+        new_data = json.loads(req.text)
+        data.extend(new_data["data"]['data'])
+        i+=1
+
+    # TODO: Son kaldigimiz page'i kaydet ve her cron run da ordan devam et
+    # 2. Databaseteki duplicatelari bul
+    # TODO: extra_parameters le merge_conflict'leri bul ve yeni datadan sil
+
+    # 3. Geri kalan datalar icin yeni entryler olustur
+    for row in data:
+        full_address = f"{row['street']} {row['address']} {row['district']} {row['city']}"
+        new_entry = Entry(
+            full_text = full_address,
+            is_resolved = True,
+            channel = "depremyardim",
+            extra_parameters = json.dumps(row)
+        )
+        new_entry.save()
+        process_entry(entry_id=new_entry.id)
+    
+get_all_depremyardim()
