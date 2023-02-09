@@ -1,3 +1,9 @@
+![alt text](https://acik-kaynak.org/_next/static/media/logo.19284790.svg)
+
+[![Afet-Harita](https://img.shields.io/badge/Afet-Harita-blue)](https://www.afetharita.com.com) [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg?logo=python&labelColor=yellow)](https://www.python.org) [![Docker](https://img.shields.io/badge/docker-build-important.svg?logo=Docker)](https://www.docker.com) [![Platform](https://img.shields.io/badge/platform-windows%2Flinux-green.svg)](https://gl.bg-tek.net/shaman/pentestbx-ets-module) [![Django](https://img.shields.io/badge/django%20version-4.1.6-blue)](https://www.djangoproject.com) [![DjangoRest](https://img.shields.io/badge/django%20rest-3.14.0-blue)](https://www.djangoproject.com) [![nginx](https://img.shields.io/badge/NGINX-blue)](https://www.nginx.com) [![git](https://badgen.net/badge/redis/7.0.3+/red?icon=redis)](https://redis.com/)
+[![celery](https://badgen.net/badge/celery/5.2.6+/red?icon=celery)](https://docs.celeryq.dev/) [![aws](https://badgen.net/badge/AWS/services//red?icon=redis)](https://aws.amazon.com/) 
+
+
 # Afet Harita Backend
 [ENGLISH VERSION](README.en.md)
 
@@ -24,6 +30,10 @@ Python (Django), Postgres (PostgreSQL), Redis, AWS (Elastic Load Balancer, ECS, 
 
 ## Geliştirme ortamının hazırlanması
 
+```sh
+git clone https://github.com/acikkaynak/deprem-yardim-backend.git
+```
+
 Docker yükledikten sonra tüm projeyi docker-compose ile çalıştırmak için
 
 ```sh
@@ -33,7 +43,7 @@ docker-compose up --build -d
 Geliştirme için sadece postgres ve redisi ayağa kaldırmak için:
 
 ```sh
-docker-compose up -d postgres redis
+docker-compose up -d database redis
 ```
 
 ## Python
