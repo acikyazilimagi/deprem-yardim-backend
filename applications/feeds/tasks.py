@@ -7,7 +7,7 @@ from feeds.models import Entry, Location
 from feeds.serializers import BulkEntrySerializer
 
 # Backend
-from trquake.celery import app
+from trquake.celery_service import app
 
 
 @app.task

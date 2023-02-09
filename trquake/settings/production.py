@@ -22,6 +22,8 @@ CSRF_TRUSTED_ORIGINS = ["https://*.afetharita.com", "http://*.afetharita.com", "
 
 DATABASE_ROUTERS = ["core.db_routers.PrimaryReplicaRouter"]
 
+CONN_MAX_AGE=600
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",

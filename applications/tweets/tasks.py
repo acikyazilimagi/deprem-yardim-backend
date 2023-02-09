@@ -10,7 +10,7 @@ from tweets.helpers import fetch_tweets
 from tweets.models import DepremAddress
 
 # Backend
-from trquake.celery import app
+from trquake.celery_service import app
 
 
 @app.task

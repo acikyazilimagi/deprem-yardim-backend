@@ -20,6 +20,7 @@ INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
 # Shell Plus
 SHELL_PLUS_PRINT_SQL = True
 
+CONN_MAX_AGE=600
 
 DATABASES = {
     "default": {

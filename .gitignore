@@ -14,6 +14,10 @@ celerybeat-schedule
 .venv
 venv/
 env/
+.DS_Store
+
+## For local skeleton builds and poetry commands.
+.python-version
 
 # statics
 statics/root/*

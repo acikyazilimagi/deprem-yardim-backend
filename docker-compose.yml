@@ -23,6 +23,9 @@ services:
       - POSTGRES_PORT=5432
     command:
       - /start-django
+    depends_on:
+      - database
+      - queue
 
   database:
     image: postgres:15.1
@@ -40,7 +43,7 @@ services:
     <<: *django
     container_name: trquake-workers
     ports: []
-    command: watchmedo auto-restart --directory=/app --pattern=*.py --recursive -- celery -A trquake.celery.app worker -B --concurrency=5 -l DEBUG
+    command: watchmedo auto-restart --directory=/app --pattern=*.py --recursive -- celery -A trquake.celery_service.app worker -B --concurrency=5 -l DEBUG
     environment:
       - DJANGO_SETTINGS_MODULE=trquake.settings.development
       - POSTGRES_PASSWORD=debug
@@ -48,6 +51,9 @@ services:
       - POSTGRES_DB=debug
       - POSTGRES_HOST=trquake-database
       - POSTGRES_PORT=5432
+    depends_on:
+      - database
+      - queue
 
   queue:
     container_name: trquake-queue
