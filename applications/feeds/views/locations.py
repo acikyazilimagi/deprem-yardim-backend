@@ -4,7 +4,7 @@ from rest_framework.viewsets import ModelViewSet
 # Applications
 from feeds.models import Location
 from core.pagination import LocationPagination
-from feeds.filters import LocationFilterBackend
+from feeds.filters import TimestampFilterBackend
 from feeds.serializers import LocationSerializer
 
 
@@ -13,4 +13,4 @@ class LocationViewSet(ModelViewSet):
     serializer_class = LocationSerializer
     http_method_names = ["options", "head", "get"]
     pagination_class = LocationPagination
-    filter_backends = [LocationFilterBackend]
+    filter_backends = [TimestampFilterBackend]

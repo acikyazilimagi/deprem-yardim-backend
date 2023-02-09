@@ -5,13 +5,13 @@ from rest_framework import filters
 from feeds.serializers import LocationFilterParamSerializer
 
 
-class LocationFilterBackend(filters.BaseFilterBackend):
+class TimestampFilterBackend(filters.BaseFilterBackend):
     """
-    Filter that only allows users to see their own objects.
+    Filter for timestamp filter.
     """
 
     def filter_queryset(self, request, queryset, view):
-        params = LocationFilterParamSerializer(data=request.query_params)
+        params = TimestampFilterParamSerializer(data=request.query_params)
         params.is_valid(raise_exception=True)
         filter_list = params.validated_data
         timestamp__gte = filter_list.get("raw__timestamp__gte", None)

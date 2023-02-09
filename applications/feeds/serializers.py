@@ -66,7 +66,7 @@ class LocationSerializer(serializers.ModelSerializer):
         fields = ["id", "formatted_address", "loc", "viewport", "raw"]
 
 
-class LocationFilterParamSerializer(serializers.Serializer):
+class TimestampFilterParamSerializer(serializers.Serializer):
     """
     Filter by query param: timestamp
     """
